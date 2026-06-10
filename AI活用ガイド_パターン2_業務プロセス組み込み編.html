@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FROM PERSONAL USE TO BUSINESS PROCESS — AIを業務プロセスに組み込む4つの選択肢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C10;
+  --panel:#13141B;
+  --panel2:#181A22;
+  --ink:#F2F2F5;
+  --sub:#9495A2;
+  --line:#23242F;
+  --accent:#7C8CFF;
+  --claude:#E08862;
+  --gpt:#23C99F;
+  --gemini:#8E82F0;
+  --copilot:#5B9BF8;
+  --danger:#FF6B6E;
+  --warn:#FFC555;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.8;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.en{font-family:'Inter','Noto Sans JP',sans-serif;letter-spacing:-.02em;}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+::selection{background:var(--accent);color:#0B0C10;}
+/* ───── progress / nav ───── */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:999;background:linear-gradient(90deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));transition:width .1s linear;}
+nav{position:sticky;top:0;z-index:900;background:rgba(11,12,16,.8);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:16px 28px;}
+.nav-brand{font-family:'Inter';font-weight:800;font-size:13px;letter-spacing:.12em;margin-right:auto;color:var(--ink);}
+nav a{color:var(--sub);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.08em;padding:6px 11px;border-radius:99px;transition:.3s var(--ease);}
+nav a:hover{color:var(--ink);background:#1D1F29;}
+@media(max-width:860px){nav a{display:none}}
+/* ───── hero ───── */
+.hero{position:relative;max-width:1200px;margin:0 auto;padding:120px 28px 50px;}
+.glow{position:absolute;border-radius:50%;filter:blur(110px);opacity:.30;z-index:0;pointer-events:none;}
+.glow1{width:480px;height:480px;background:#3A2BD9;top:-160px;right:-100px;animation:drift 12s ease-in-out infinite;}
+.glow2{width:380px;height:380px;background:#0E5F4E;bottom:-180px;left:-120px;animation:drift 12s ease-in-out infinite reverse;}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,30px)}}
+.hero>*{position:relative;z-index:1;}
+.hero .eyebrow{display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--sub);margin-bottom:36px;}
+.hero .eyebrow::before{content:"";width:42px;height:1px;background:var(--accent);}
+.hero h1{font-family:'Inter';font-weight:900;font-size:clamp(40px,8vw,104px);line-height:1.02;letter-spacing:-.03em;}
+.hero h1 .l2{display:block;background:linear-gradient(92deg,var(--claude) 0%,var(--gpt) 34%,var(--gemini) 67%,var(--copilot) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero .jp{margin-top:34px;font-size:clamp(14px,1.8vw,17px);font-weight:700;line-height:2.1;}
+.hero .jp small{display:block;font-weight:400;color:var(--sub);font-size:.82em;margin-top:8px;max-width:620px;}
+.hero-logos{display:flex;gap:14px;margin-top:48px;flex-wrap:wrap;}
+.hl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:10px 22px 10px 12px;font-family:'Inter';font-weight:700;font-size:13.5px;transition:.4s var(--ease);}
+.hl svg{width:30px;height:30px;}
+.hl:hover{transform:translateY(-4px);border-color:#3A3C4C;box-shadow:0 18px 40px rgba(0,0,0,.5);}
+/* marquee */
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:84px;padding:18px 0;}
+.mtrack{display:inline-block;animation:scroll 38s linear infinite;}
+.mtrack span{font-family:'Inter';font-weight:900;font-size:52px;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px #33343F;padding-right:56px;}
+.mtrack span b{color:var(--ink);-webkit-text-stroke:0;}
+@keyframes scroll{to{transform:translateX(-50%)}}
+/* ───── section common ───── */
+section{max-width:1200px;margin:0 auto;padding:110px 28px;position:relative;}
+.sec-head{margin-bottom:56px;}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--accent);margin-bottom:20px;}
+.eyebrow::before{content:"";width:42px;height:1px;background:var(--accent);}
+.sec-head h2{font-size:clamp(25px,4vw,42px);font-weight:900;line-height:1.45;letter-spacing:.01em;}
+.sec-head .sub{margin-top:16px;color:var(--sub);font-size:13.5px;max-width:580px;}
+/* reveal */
+.reveal{opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);}
+.reveal.on{opacity:1;transform:none;filter:none;}
+.stagger>*{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.stagger.on>*{opacity:1;transform:none;}
+.stagger.on>*:nth-child(1){transition-delay:.04s}.stagger.on>*:nth-child(2){transition-delay:.10s}
+.stagger.on>*:nth-child(3){transition-delay:.16s}.stagger.on>*:nth-child(4){transition-delay:.22s}
+.stagger.on>*:nth-child(5){transition-delay:.28s}.stagger.on>*:nth-child(6){transition-delay:.34s}
+.stagger.on>*:nth-child(7){transition-delay:.40s}.stagger.on>*:nth-child(8){transition-delay:.46s}
+/* ───── 01 axes ───── */
+.axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;}
+.axis{background:var(--panel);padding:34px 26px;transition:.4s var(--ease);}
+.axis:hover{background:var(--panel2);}
+.axis .n{font-family:'Inter';font-size:11px;font-weight:700;color:#4A4B58;letter-spacing:.15em;}
+.axis svg.ic{width:26px;height:26px;margin:18px 0 14px;color:var(--accent);}
+.axis h3{font-size:14.5px;font-weight:700;line-height:1.6;}
+.axis p{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.7;}
+.thesis{margin-top:64px;text-align:center;font-weight:900;font-size:clamp(18px,3vw,28px);line-height:2;}
+.thesis .strike{color:#4A4B58;text-decoration:line-through;text-decoration-thickness:3px;}
+.thesis .grad{background:linear-gradient(92deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));-webkit-background-clip:text;background-clip:text;color:transparent;}
+/* ───── 02 AI cards ───── */
+.ai{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:44px 40px;margin-bottom:28px;position:relative;overflow:hidden;}
+.ai::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
+.ai.claude::before{background:var(--claude);}
+.ai.gpt::before{background:var(--gpt);}
+.ai.gemini::before{background:linear-gradient(90deg,#4285F4,#9B72CB,#D96570);}
+.ai.copilot::before{background:linear-gradient(90deg,#26C6DA,#3B82F6,#9333EA);}
+.ai-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:10px;}
+.ai-top svg.logo{width:50px;height:50px;}
+.ai-top h3{font-family:'Inter';font-size:29px;font-weight:800;letter-spacing:-.02em;}
+.ai-top .en-tag{font-family:'Inter';font-size:10.5px;font-weight:700;letter-spacing:.22em;color:var(--sub);}
+.ai-top .jp-tag{margin-left:auto;font-size:13px;font-weight:700;}
+.ai.claude .jp-tag{color:var(--claude);}
+.ai.gpt .jp-tag{color:var(--gpt);}
+.ai.gemini .jp-tag{color:var(--gemini);}
+.ai.copilot .jp-tag{color:var(--copilot);}
+.feats{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px;margin-top:26px;}
+.feat{border:1px solid var(--line);background:var(--panel2);border-radius:18px;padding:20px;transition:.35s var(--ease);}
+.feat:hover{transform:translateY(-4px);}
+.ai.claude .feat:hover{border-color:var(--claude);}
+.ai.gpt .feat:hover{border-color:var(--gpt);}
+.ai.gemini .feat:hover{border-color:var(--gemini);}
+.ai.copilot .feat:hover{border-color:var(--copilot);}
+.feat b{display:block;font-family:'Inter','Noto Sans JP';font-size:15px;font-weight:800;}
+.feat p{font-size:12px;color:var(--sub);margin-top:5px;line-height:1.7;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.chip{font-size:10.5px;font-weight:700;border-radius:99px;padding:3px 11px;border:1px solid var(--line);color:var(--sub);}
+.ai.claude .chip{color:#EFA585;border-color:#4A3026;}
+.ai.gpt .chip{color:#5FDDBC;border-color:#1C4A3D;}
+.ai.gemini .chip{color:#B0A7F5;border-color:#363060;}
+.ai.copilot .chip{color:#92BEFA;border-color:#1F3A63;}
+.note{margin-top:20px;font-size:11.5px;color:var(--sub);display:flex;gap:8px;align-items:flex-start;}
+.note svg.ic{width:15px;height:15px;margin-top:4px;color:var(--warn);}
+/* ───── 03 matrix ───── */
+.matrix{background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;}
+.mrow{display:grid;grid-template-columns:1fr repeat(4,76px);align-items:center;padding:0 10px 0 26px;border-bottom:1px solid var(--line);transition:.3s;}
+.mrow:last-child{border-bottom:none;}
+.mrow:not(.mhead):hover{background:var(--panel2);}
+.mhead{background:#101117;}
+.mhead .mcell{padding:16px 0;display:flex;justify-content:center;}
+.mhead svg{width:26px;height:26px;}
+.mgoal{display:flex;align-items:center;gap:14px;padding:16px 0;font-size:12.5px;font-weight:700;}
+.mgoal svg.ic{width:18px;height:18px;color:var(--sub);}
+.mcell{display:flex;justify-content:center;}
+.dot{width:13px;height:13px;border-radius:50%;}
+.dot.c{background:var(--claude);box-shadow:0 0 12px rgba(224,136,98,.5);}
+.dot.g{background:var(--gpt);box-shadow:0 0 12px rgba(35,201,159,.5);}
+.dot.m{background:linear-gradient(135deg,#4285F4,#9B72CB);box-shadow:0 0 12px rgba(142,130,240,.5);}
+.dot.p{background:var(--copilot);box-shadow:0 0 12px rgba(91,155,248,.5);}
+.dot.off{width:5px;height:5px;background:#33343F;box-shadow:none;}
+.legend{display:flex;gap:22px;justify-content:flex-end;margin-top:14px;font-size:11px;color:var(--sub);font-weight:700;}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ink);margin-right:6px;}
+.legend i.off{width:5px;height:5px;background:#33343F;vertical-align:2px;}
+/* ───── 04 roles ───── */
+.role{background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:36px 34px;margin-bottom:24px;}
+.role-top{display:flex;align-items:baseline;gap:18px;margin-bottom:24px;flex-wrap:wrap;}
+.role-top .rn{font-family:'Inter';font-weight:900;font-size:15px;color:#4A4B58;letter-spacing:.1em;}
+.role-top h3{font-size:21px;font-weight:900;}
+.role-top p{font-size:12px;color:var(--sub);}
+.rcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;}
+.rcol{border:1px solid var(--line);background:var(--panel2);border-radius:16px;padding:18px;}
+.rcol h4{display:flex;align-items:center;gap:9px;font-family:'Inter';font-size:13.5px;font-weight:800;margin-bottom:12px;}
+.rcol h4 svg{width:21px;height:21px;}
+.rcol ul{list-style:none;}
+.rcol li{font-size:11.5px;color:#C5C6CF;padding:5px 0 5px 16px;position:relative;line-height:1.65;}
+.rcol li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:1.5px;}
+.rcol.claude li::before{background:var(--claude);}
+.rcol.gpt li::before{background:var(--gpt);}
+.rcol.gemini li::before{background:var(--gemini);}
+.rcol.copilot li::before{background:var(--copilot);}
+/* ───── 05 levels ───── */
+.levels{display:flex;flex-direction:column;gap:14px;}
+.lv{display:grid;grid-template-columns:120px 1fr;gap:20px;align-items:center;}
+.lv .meta{text-align:right;}
+.lv .meta .ln{font-family:'Inter';font-size:10.5px;font-weight:800;letter-spacing:.18em;color:var(--sub);}
+.lv .meta b{display:block;font-size:13.5px;font-weight:800;line-height:1.5;}
+.lv .bar{height:58px;border-radius:14px;display:flex;align-items:center;padding:0 20px;font-size:11.5px;font-weight:700;color:#fff;transform-origin:left;transform:scaleX(0);transition:transform 1s var(--ease);}
+.lv .bar span{opacity:0;transition:opacity .5s .6s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.levels.on .bar{transform:scaleX(1);}
+.levels.on .bar span{opacity:.95;}
+.lv:nth-child(1) .bar{width:36%;background:#272936;transition-delay:.05s;}
+.lv:nth-child(2) .bar{width:50%;background:#2C3052;transition-delay:.15s;}
+.lv:nth-child(3) .bar{width:64%;background:#37407E;transition-delay:.25s;}
+.lv:nth-child(4) .bar{width:80%;background:#4A55BC;transition-delay:.35s;}
+.lv:nth-child(5) .bar{width:100%;background:linear-gradient(90deg,#5B68FF,#8E82F0);transition-delay:.45s;}
+.lv-note{margin-top:34px;text-align:center;font-weight:800;font-size:clamp(14px,2.2vw,18px);line-height:2;}
+.lv-note .grad{background:linear-gradient(92deg,#5B68FF,#8E82F0);-webkit-background-clip:text;background-clip:text;color:transparent;}
+@media(max-width:640px){.lv{grid-template-columns:88px 1fr}.lv .bar{height:48px}}
+/* ───── 06/07 automation ───── */
+.flow{display:flex;align-items:stretch;margin-top:20px;overflow-x:auto;padding-bottom:10px;}
+.fstep{flex:1;min-width:138px;position:relative;padding:26px 16px 22px;border-left:1px solid var(--line);}
+.fstep:first-child{border-left:none;}
+.fstep .fn{font-family:'Inter';font-size:10.5px;font-weight:700;color:#4A4B58;letter-spacing:.15em;}
+.fstep .fico{width:48px;height:48px;border-radius:14px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin:14px 0 12px;color:var(--ink);}
+.fstep .fico svg.ic{width:22px;height:22px;}
+.fstep b{font-size:13px;font-weight:800;display:block;line-height:1.5;}
+.fstep span{font-size:10.5px;color:var(--sub);display:block;margin-top:4px;line-height:1.65;}
+.fstep .who{display:inline-block;margin-top:10px;font-family:'Inter';font-size:9.5px;font-weight:800;letter-spacing:.1em;border:1px solid var(--line);color:var(--accent);border-radius:99px;padding:2px 10px;}
+.flow.on .fstep{animation:rise .7s var(--ease) backwards;}
+.flow.on .fstep:nth-child(1){animation-delay:.05s}.flow.on .fstep:nth-child(2){animation-delay:.16s}
+.flow.on .fstep:nth-child(3){animation-delay:.27s}.flow.on .fstep:nth-child(4){animation-delay:.38s}
+.flow.on .fstep:nth-child(5){animation-delay:.49s}.flow.on .fstep:nth-child(6){animation-delay:.60s}
+.flow.on .fstep:nth-child(7){animation-delay:.71s}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.vision{margin-top:18px;font-size:11px;color:var(--sub);}
+/* teams mock */
+.teams-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;margin-top:44px;}
+.tcard{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:16px;overflow:hidden;transition:.35s var(--ease);}
+.tcard:hover{transform:translateY(-4px);}
+.tcard .th{display:flex;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid var(--line);font-family:'Inter';font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--accent);}
+.tcard .th svg.ic{width:15px;height:15px;}
+.tcard .tb{padding:16px 20px;font-size:12px;line-height:2;color:#C5C6CF;}
+.tcard .tb b{color:var(--ink);}
+.tcard .tb .num{font-family:'Inter';font-weight:700;letter-spacing:.04em;}
+.tcard.err{border-left-color:var(--danger);}
+.tcard.err .th{color:var(--danger);}
+.tcard.warn{border-left-color:var(--warn);}
+.tcard.warn .th{color:var(--warn);}
+/* stock table */
+.stock{background:var(--panel);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:44px;}
+.srow{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr 1.2fr;align-items:center;padding:14px 26px;border-bottom:1px solid var(--line);font-size:13px;}
+.srow:last-child{border-bottom:none;}
+.srow.shead{background:#101117;font-family:'Inter';font-size:10.5px;font-weight:800;letter-spacing:.15em;color:var(--sub);padding:12px 26px;}
+.srow .r{text-align:right;font-family:'Inter';font-weight:700;font-variant-numeric:tabular-nums;}
+.srow .st{text-align:right;font-size:11px;font-weight:800;}
+.srow.alert{background:#1C1014;}
+.srow.alert .minus{color:var(--danger);}
+.srow .ok{color:var(--gpt);}
+.srow .wn{color:var(--warn);}
+.srow .ng{color:var(--danger);}
+.keymsg{margin-top:80px;text-align:center;}
+.keymsg .en-big{font-family:'Inter';font-weight:900;font-size:clamp(26px,5vw,56px);letter-spacing:-.03em;line-height:1.15;}
+.keymsg .en-big .grad{background:linear-gradient(92deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.keymsg p{margin-top:20px;font-size:13px;font-weight:700;color:var(--sub);line-height:2.2;}
+/* ───── 08 cautions ───── */
+.cares{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;}
+.care{background:var(--panel);padding:30px 26px;transition:.3s;}
+.care:hover{background:var(--panel2);}
+.care svg.ic{width:24px;height:24px;color:var(--warn);margin-bottom:14px;}
+.care h3{font-size:14px;font-weight:800;}
+.care p{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.75;}
+/* ───── 09 summary ───── */
+.summary{text-align:center;padding-top:130px;padding-bottom:130px;}
+.summary .en-huge{font-family:'Inter';font-weight:900;font-size:clamp(34px,7vw,84px);letter-spacing:-.03em;line-height:1.05;}
+.summary .en-huge .grad{background:linear-gradient(92deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.summary p{margin-top:30px;font-size:14px;font-weight:700;line-height:2.4;color:#C5C6CF;}
+.summary p .key{color:var(--ink);border-bottom:2px solid var(--accent);}
+footer{border-top:1px solid var(--line);text-align:center;padding:40px 28px 52px;color:#54555F;font-size:10.5px;line-height:2;}
+@media(max-width:760px){
+  section{padding:70px 20px;}
+  .hero{padding:76px 20px 36px;}
+  .mrow{grid-template-columns:1fr repeat(4,44px);padding-left:16px;}
+  .ai{padding:30px 22px;}
+  .srow{padding:12px 14px;font-size:11.5px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gemGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285F4"/><stop offset=".55" stop-color="#9B72CB"/><stop offset="1" stop-color="#D96570"/></linearGradient>
+  <linearGradient id="cpGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26C6DA"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#9333EA"/></linearGradient>
+  <symbol id="logo-claude" viewBox="0 0 100 100"><g fill="#D97757"><circle cx="50" cy="50" r="11"/><rect x="46" y="2" width="8" height="32" rx="4"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(33 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(66 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(99 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(132 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(165 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(198 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(231 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(264 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(297 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(330 50 50)"/></g></symbol>
+  <symbol id="logo-openai" viewBox="0 0 100 100"><g fill="none" stroke="#F2F2F5" stroke-width="6.5"><rect x="36" y="7" width="28" height="56" rx="14"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(120 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(120 50 50)"/></g></symbol>
+  <symbol id="logo-gemini" viewBox="0 0 100 100"><path fill="url(#gemGrad)" d="M50 2 C56 32 68 44 98 50 C68 56 56 68 50 98 C44 68 32 56 2 50 C32 44 44 32 50 2 Z"/></symbol>
+  <symbol id="logo-copilot" viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="url(#cpGrad)"/><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><circle cx="37" cy="50" r="16"/><circle cx="63" cy="50" r="16"/></g></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1L11.5 4.9"/><path d="M14 10.5a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.5-1.5"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></symbol>
+  <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M4 4l7 16 2.5-6.5L20 11 4 4z"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6 12 13 2 6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 16v-5"/><path d="M13 16V8"/><path d="M18 16v-8"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 8h20"/><path d="M5.5 5.7h.01"/><path d="M8.2 5.7h.01"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2c1 5.5 3.5 8 10 10-6.5 2-9 4.5-10 10-1-5.5-3.5-8-10-10 6.5-2 9-4.5 10-10z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M19.1 4.9 17 7"/><path d="M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-csv" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 12h8"/><path d="M8 16h8"/><path d="M12 12v4"/></symbol>
+  <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></symbol>
+</defs></svg>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-in">
+    <span class="nav-brand en">AI GUIDE — 02</span>
+    <a href="#s1">PERSPECTIVE</a><a href="#s2">FEATURES</a><a href="#s3">MATRIX</a><a href="#s4">ROLES</a><a href="#s5">LEVELS</a><a href="#s6">AUTOMATION</a><a href="#s8">RISKS</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="glow glow1"></div><div class="glow glow2"></div>
+  <div class="eyebrow en">EMPLOYEE GUIDE / ADVANCED — 2026.06 EDITION</div>
+  <h1 class="en">FROM PERSONAL USE<span class="l2">TO BUSINESS PROCESS.</span></h1>
+  <p class="jp">AIを「個人の便利ツール」で終わらせない。<small>業務データ・社内システム・通知・分析・開発とつなぎ、業務プロセスそのものを変えるための4つの選択肢 — 管理職・リーダー・エンジニア・EC担当・分析担当向けガイド。</small></p>
+  <div class="hero-logos">
+    <div class="hl"><svg><use href="#logo-claude"/></svg>Claude</div>
+    <div class="hl"><svg><use href="#logo-openai"/></svg>ChatGPT</div>
+    <div class="hl"><svg><use href="#logo-gemini"/></svg>Gemini</div>
+    <div class="hl"><svg><use href="#logo-copilot"/></svg>Copilot</div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="mtrack en">
+    <span>CONNECT</span><span><b>AUTOMATE</b></span><span>SCALE</span><span><b>OPERATE</b></span><span>CONNECT</span><span><b>AUTOMATE</b></span><span>SCALE</span><span><b>OPERATE</b></span>
+  </div>
+</div>
+
+<!-- 01 -->
+<section id="s1">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">01 — PERSPECTIVE</div>
+    <h2>「何が賢いか」ではなく、<br>「どの業務に接続するか」。</h2>
+    <p class="sub">ベンチマークの数値より、自部門の業務・データ・システムとの接続性が成果を決めます。</p>
+  </div>
+  <div class="axes stagger">
+    <div class="axis"><span class="n en">01</span><svg class="ic"><use href="#i-link"/></svg><h3>連携できる業務基盤</h3><p>Google Workspace / Microsoft 365 / ブラウザ</p></div>
+    <div class="axis"><span class="n en">02</span><svg class="ic"><use href="#i-db"/></svg><h3>届く業務データ</h3><p>メール・文書・表・会議録への直接アクセス</p></div>
+    <div class="axis"><span class="n en">03</span><svg class="ic"><use href="#i-layers"/></svg><h3>複数ステップの自走</h3><p>調査→整理→成果物化を一気通貫で任せられるか</p></div>
+    <div class="axis"><span class="n en">04</span><svg class="ic"><use href="#i-cursor"/></svg><h3>画面操作への展開</h3><p>管理画面の確認・入力など作業領域まで支援できるか</p></div>
+    <div class="axis"><span class="n en">05</span><svg class="ic"><use href="#i-repeat"/></svg><h3>定型業務の再利用性</h3><p>ルールを登録し、誰でも同じ品質を出せるか</p></div>
+    <div class="axis"><span class="n en">06</span><svg class="ic"><use href="#i-box"/></svg><h3>成果物の出力形式</h3><p>文書・スライド・CSV・コードで業務にそのまま使えるか</p></div>
+  </div>
+  <p class="thesis reveal"><span class="strike">どのAIが賢いか</span>　ではなく<br><span class="grad">どのAIが、うちの業務につながるか。</span></p>
+</section>
+
+<!-- 02 -->
+<section id="s2">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">02 — UNIQUE FEATURES</div>
+    <h2>4つのAIの差別化要素。</h2>
+    <p class="sub">機能名と「業務で何ができるか」をセットで押さえます。</p>
+  </div>
+
+  <div class="ai claude reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-claude"/></svg>
+      <div><h3 class="en">Claude</h3><span class="en-tag en">ANTHROPIC</span></div>
+      <span class="jp-tag">長文理解 × 業務文書 × エージェント作業</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Claude Code</b><p>コードベース読解・編集・実行までの開発エージェント</p><div class="chips"><span class="chip">既存コード理解</span><span class="chip">複数ファイル改修</span><span class="chip">規約準拠レビュー</span></div></div>
+      <div class="feat"><b>Claude in Chrome</b><p>ブラウザ上の作業を画面を見ながら支援</p><div class="chips"><span class="chip">EC管理画面の確認</span><span class="chip">フォーム入力</span></div></div>
+      <div class="feat"><b>Cowork</b><p>複数ステップの知識労働を並走で進める</p><div class="chips"><span class="chip">改善案の整理</span><span class="chip">複数資料→報告書</span></div></div>
+      <div class="feat"><b>Skills</b><p>手順・ルール・資料を登録し毎回同じ品質で実行</p><div class="chips"><span class="chip">文書品質の統一</span><span class="chip">Excel処理の手順化</span></div></div>
+      <div class="feat"><b>Artifacts</b><p>文書・図解・HTML・コードをその場で生成・編集</p><div class="chips"><span class="chip">資料のたたき台</span><span class="chip">プロトタイプ</span></div></div>
+      <div class="feat"><b>Projects</b><p>資料・前提を集約し継続的に相談</p><div class="chips"><span class="chip">部門ナレッジ基盤</span></div></div>
+      <div class="feat"><b>モバイル連携</b><p>スマホからPC上の作業へ接続・指示・確認</p><div class="chips"><span class="chip">外出先から進捗確認</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai gpt reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-openai"/></svg>
+      <div><h3 class="en">ChatGPT</h3><span class="en-tag en">OPENAI</span></div>
+      <span class="jp-tag">調査 × 制作 × エージェント実行</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Deep Research</b><p>Web情報を調査・統合しレポート化</p><div class="chips"><span class="chip">市場・競合調査</span><span class="chip">制度変更の整理</span></div></div>
+      <div class="feat"><b>エージェントモード</b><p>調査・ファイル・Web操作・資料化まで自走</p><div class="chips"><span class="chip">収集→表→資料構成</span></div></div>
+      <div class="feat"><b>Codex</b><p>開発作業の包括支援</p><div class="chips"><span class="chip">機能開発</span><span class="chip">テスト作成</span><span class="chip">API連携</span></div></div>
+      <div class="feat"><b>ファイル分析</b><p>PDF・Excel・CSV・画像の分析</p><div class="chips"><span class="chip">傾向・異常値</span><span class="chip">レビュー分析</span></div></div>
+      <div class="feat"><b>画像生成</b><p>商品・広告・資料ビジュアルの生成</p><div class="chips"><span class="chip">LP・バナー案</span><span class="chip">フロー図解</span></div></div>
+      <div class="feat"><b>GPTs</b><p>業務特化カスタムAIをチームで共有</p><div class="chips"><span class="chip">説明文GPT</span><span class="chip">一次対応GPT</span></div></div>
+      <div class="feat"><b>Canvas</b><p>文書・コードの共同編集</p><div class="chips"><span class="chip">仕様書の推敲</span></div></div>
+      <div class="feat"><b>コネクタ</b><p>Drive等の外部ファイルを直接参照</p><div class="chips"><span class="chip">クラウド資料の分析</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai gemini reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-gemini"/></svg>
+      <div><h3 class="en">Gemini</h3><span class="en-tag en">GOOGLE</span></div>
+      <span class="jp-tag">Google Workspace × ナレッジ基盤</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Workspace連携</b><p>Gmail・Drive・Docs・Sheets・Meet・Chatを横断</p><div class="chips"><span class="chip">状況の横断整理</span><span class="chip">会議要約</span></div></div>
+      <div class="feat"><b>NotebookLM</b><p>資料群を質問可能なナレッジベースに</p><div class="chips"><span class="chip">マニュアルのDB化</span><span class="chip">横断質問</span><span class="chip">音声解説</span></div></div>
+      <div class="feat"><b>Deep Research</b><p>Google検索×調査レポート</p><div class="chips"><span class="chip">需要・トレンド調査</span></div></div>
+      <div class="feat"><b>画像・動画生成</b><p>静止画から動画まで生成</p><div class="chips"><span class="chip">広告ビジュアル</span><span class="chip">短尺動画</span></div></div>
+      <div class="feat"><b>Gemini in Chrome</b><p>閲覧中ページの要約・質問</p><div class="chips"><span class="chip">調査の補助</span></div></div>
+      <div class="feat"><b>Gems</b><p>目的特化のカスタムGemini</p><div class="chips"><span class="chip">定型業務の登録</span></div></div>
+      <div class="feat"><b>Gemini CLI</b><p>ターミナルからのコーディング支援</p><div class="chips"><span class="chip">スクリプト開発</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai copilot reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-copilot"/></svg>
+      <div><h3 class="en">Copilot</h3><span class="en-tag en">MICROSOFT</span></div>
+      <span class="jp-tag">Microsoft 365 × 社内エージェント化</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Word / Excel / PowerPoint</b><p>文書・分析・スライドをアプリ内で完結</p><div class="chips"><span class="chip">データ分析</span><span class="chip">方針資料の生成</span></div></div>
+      <div class="feat"><b>Outlook / Teams</b><p>メール・会議・タスクの処理</p><div class="chips"><span class="chip">会議要約→タスク化</span><span class="chip">返信案</span></div></div>
+      <div class="feat"><b>Copilot Pages</b><p>AI出力をチームで共同編集・ナレッジ化</p><div class="chips"><span class="chip">分析結果の共有</span></div></div>
+      <div class="feat"><b>Researcher / Analyst</b><p>調査・分析特化のエージェント</p><div class="chips"><span class="chip">社内×Web横断調査</span><span class="chip">深掘り分析</span></div></div>
+      <div class="feat"><b>Copilot Studio</b><p>社内業務向けエージェントの構築基盤</p><div class="chips"><span class="chip">問い合わせBot</span><span class="chip">申請フロー</span><span class="chip">在庫確認</span></div></div>
+    </div>
+    <p class="note"><svg class="ic"><use href="#i-info"/></svg>Microsoft 365 Copilot は有償ライセンスが必要。展開設計時はライセンス計画もセットで。</p>
+  </div>
+</section>
+
+<!-- 03 -->
+<section id="s3">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">03 — MATRIX</div>
+    <h2>業務目的から、逆引きする。</h2>
+  </div>
+  <div class="matrix reveal">
+    <div class="mrow mhead">
+      <div class="mgoal en" style="font-size:10.5px;color:var(--sub);letter-spacing:.2em;">BUSINESS GOAL</div>
+      <div class="mcell"><svg><use href="#logo-claude"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-openai"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-gemini"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-copilot"/></svg></div>
+    </div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-doc"/></svg>資料整理・ナレッジ文書化</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-search"/></svg>Web調査のレポート化</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-mail"/></svg>Google Workspace上のデータ活用</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-grid"/></svg>Microsoft 365上の業務</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-code"/></svg>開発支援・社内ツール作成</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-browser"/></svg>ブラウザ作業の補助</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-repeat"/></svg>定型業務の再利用（品質統一）</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-db"/></svg>社内ナレッジの質問応答基盤化</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-image"/></svg>画像・動画・素材の生成</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-gear"/></svg>問い合わせ・申請のエージェント化</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+  </div>
+  <div class="legend reveal"><span><i></i>接続先として有力</span><span><i class="off"></i>他のAIが向いている</span></div>
+</section>
+
+<!-- 04 -->
+<section id="s4">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">04 — BY ROLE</div>
+    <h2>職種別・活用モデル。</h2>
+    <p class="sub">自分の職種から読み始めてください。4つのAIの組み合わせ方のモデルケースです。</p>
+  </div>
+
+  <div class="role reveal">
+    <div class="role-top"><span class="rn en">ROLE 01</span><h3>管理職・リーダー</h3><p>方針策定・状況把握・チーム運営</p></div>
+    <div class="rcols stagger">
+      <div class="rcol claude"><h4><svg><use href="#logo-claude"/></svg>Claude</h4><ul><li>部門方針の文章化</li><li>課題整理・改善案の構造化</li><li>評価・報告書の型づくり</li><li>Skillsで文書品質を統一</li></ul></div>
+      <div class="rcol gpt"><h4><svg><use href="#logo-openai"/></svg>ChatGPT</h4><ul><li>業界・競合調査</li><li>施策の前提調査</li><li>企画案の比較出し</li><li>調査→資料構成化</li></ul></div>
+      <div class="rcol gemini"><h4><svg><use href="#logo-gemini"/></svg>Gemini</h4><ul><li>Gmail・Drive・Meetの横断整理</li><li>過去資料からの要点抽出</li><li>判断材料の整理</li></ul></div>
+      <div class="rcol copilot"><h4><svg><use href="#logo-copilot"/></svg>Copilot</h4><ul><li>Teams会議の要約→タスク化</li><li>Outlook整理</li><li>方針資料のスライド化</li><li>Studioで問い合わせBot</li></ul></div>
+    </div>
+  </div>
+
+  <div class="role reveal">
+    <div class="role-top"><span class="rn en">ROLE 02</span><h3>エンジニア</h3><p>開発スピード・品質・ドキュメント</p></div>
+    <div class="rcols stagger">
+      <div class="rcol claude"><h4><svg><use href="#logo-claude"/></svg>Claude</h4><ul><li>Claude Codeで既存コード理解</li><li>バグ修正・リファクタリング</li><li>Skillsでレビュー基準を再利用</li><li>複数ファイル横断の改修</li></ul></div>
+      <div class="rcol gpt"><h4><svg><use href="#logo-openai"/></svg>ChatGPT</h4><ul><li>Codexで開発・レビュー・テスト</li><li>調査→設計→実装方針→文書化</li><li>API連携・社内ツール相談</li></ul></div>
+      <div class="rcol gemini"><h4><svg><use href="#logo-gemini"/></svg>Gemini</h4><ul><li>Drive内の設計書参照</li><li>Sheetsの仕様表整理</li><li>NotebookLMで技術資料を横断</li></ul></div>
+      <div class="rcol copilot"><h4><svg><use href="#logo-copilot"/></svg>Copilot</h4><ul><li>Microsoft系開発環境と連携</li><li>Studioで社内ツール・Bot構築</li><li>M365データ×開発をつなぐ</li></ul></div>
+    </div>
+  </div>
+
+  <div class="role reveal">
+    <div class="role-top"><span class="rn en">ROLE 03</span><h3>EC担当</h3><p>商品登録・ページ制作・問い合わせ・改善</p></div>
+    <div class="rcols stagger">
+      <div class="rcol claude"><h4><svg><use href="#logo-claude"/></svg>Claude</h4><ul><li>ルール準拠の商品説明文</li><li>問い合わせ返信の定型化</li><li>FAQ・返品案内の整備</li><li>in Chromeでモール管理画面の確認</li></ul></div>
+      <div class="rcol gpt"><h4><svg><use href="#logo-openai"/></svg>ChatGPT</h4><ul><li>訴求軸の複数出し</li><li>バナー・LP・SNS画像案</li><li>レビュー・問い合わせ分析</li><li>商品/売上CSVから改善点</li></ul></div>
+      <div class="rcol gemini"><h4><svg><use href="#logo-gemini"/></svg>Gemini</h4><ul><li>Sheetsの商品マスター整理</li><li>Drive内の商品資料確認</li><li>NotebookLMで商品知識を共有化</li></ul></div>
+      <div class="rcol copilot"><h4><svg><use href="#logo-copilot"/></svg>Copilot</h4><ul><li>Excelで売上・在庫分析</li><li>改善提案のスライド化</li><li>Studioで注文確認エージェント</li></ul></div>
+    </div>
+  </div>
+
+  <div class="role reveal">
+    <div class="role-top"><span class="rn en">ROLE 04</span><h3>分析担当</h3><p>データ整理からレポーティングまで</p></div>
+    <div class="rcols stagger">
+      <div class="rcol claude"><h4><svg><use href="#logo-claude"/></svg>Claude</h4><ul><li>定例レポートの型づくり</li><li>分析コメントの観点統一</li><li>Claude CodeでPython・SQL</li></ul></div>
+      <div class="rcol gpt"><h4><svg><use href="#logo-openai"/></svg>ChatGPT</h4><ul><li>Deep Researchで市場・制度調査</li><li>CSV・PDFの傾向・異常値確認</li><li>意思決定用レポート化</li></ul></div>
+      <div class="rcol gemini"><h4><svg><use href="#logo-gemini"/></svg>Gemini</h4><ul><li>Sheetsの数値整理</li><li>NotebookLMに決算・調査資料</li><li>分析前提の確認</li></ul></div>
+      <div class="rcol copilot"><h4><svg><use href="#logo-copilot"/></svg>Copilot</h4><ul><li>関数・ピボット・グラフ補助</li><li>分析結果の報告資料化</li><li>M365データと連携</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="s5">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">05 — MATURITY LEVELS</div>
+    <h2>AI活用の5段階。</h2>
+    <p class="sub">レベルが上がるほど、属人作業がプロセスに変わります。</p>
+  </div>
+  <div class="levels reveal">
+    <div class="lv"><div class="meta"><span class="ln en">LEVEL 1</span><b>AIに相談する</b></div><div class="bar"><span>文章作成・要約・調査</span></div></div>
+    <div class="lv"><div class="meta"><span class="ln en">LEVEL 2</span><b>ファイルを処理する</b></div><div class="bar"><span>PDF・CSV・Excelの読み取り・整理</span></div></div>
+    <div class="lv"><div class="meta"><span class="ln en">LEVEL 3</span><b>業務データに反映する</b></div><div class="bar"><span>CSV作成・在庫表更新・チェックリスト化</span></div></div>
+    <div class="lv"><div class="meta"><span class="ln en">LEVEL 4</span><b>システム操作につなげる</b></div><div class="bar"><span>SMILEへのCSVアップロード・登録処理</span></div></div>
+    <div class="lv"><div class="meta"><span class="ln en">LEVEL 5</span><b>通知・例外処理まで</b></div><div class="bar"><span>Teams通知・在庫アラート・処理ログ記録</span></div></div>
+  </div>
+  <p class="lv-note reveal">現在の多くはレベル1〜2。<br>次に示すのは、<span class="grad">レベル4〜5を目指す自動化モデル（構想）</span>です。</p>
+</section>
+
+<!-- 06 -->
+<section id="s6">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">06 — AUTOMATION MODEL 1</div>
+    <h2>受注伝票を読み、SMILEへ登録する。</h2>
+    <p class="sub">OCR・AI・RPA・CSV・基幹システム・Teamsが役割分担し、手入力をなくす構想です。常時起動で、伝票が届いたら自動処理。</p>
+  </div>
+  <div class="flow reveal">
+    <div class="fstep"><span class="fn en">01</span><div class="fico"><svg class="ic"><use href="#i-doc"/></svg></div><b>伝票取得</b><span>フォルダ／メールからPDF・画像を取得</span><span class="who">INPUT</span></div>
+    <div class="fstep"><span class="fn en">02</span><div class="fico"><svg class="ic"><use href="#i-eye"/></svg></div><b>OCR読み取り</b><span>伝票の文字をデータ化</span><span class="who">OCR</span></div>
+    <div class="fstep"><span class="fn en">03</span><div class="fico"><svg class="ic"><use href="#i-spark"/></svg></div><b>AIが項目整理</b><span>得意先・商品コード・数量・納期・金額を補正</span><span class="who">AI</span></div>
+    <div class="fstep"><span class="fn en">04</span><div class="fico"><svg class="ic"><use href="#i-csv"/></svg></div><b>CSV化・検証</b><span>SMILE取込形式へ変換、必須項目チェック</span><span class="who">CSV</span></div>
+    <div class="fstep"><span class="fn en">05</span><div class="fico"><svg class="ic"><use href="#i-gear"/></svg></div><b>SMILE登録</b><span>RPAが起動し、CSVアップロード・伝票登録</span><span class="who">RPA</span></div>
+    <div class="fstep"><span class="fn en">06</span><div class="fico"><svg class="ic"><use href="#i-clock"/></svg></div><b>番号を記録</b><span>自動採番された伝票番号をログ保存</span><span class="who">LOG</span></div>
+    <div class="fstep"><span class="fn en">07</span><div class="fico"><svg class="ic"><use href="#i-bell"/></svg></div><b>Teams通知</b><span>印刷対象・エラー・要確認を担当者へ</span><span class="who">NOTIFY</span></div>
+  </div>
+  <p class="vision">※ 今後の構築を検討している構想モデルです。現時点で稼働しているものではありません。</p>
+
+  <div class="teams-grid reveal">
+    <div class="tcard">
+      <div class="th"><svg class="ic"><use href="#i-bell"/></svg>ORDER BOT — 完了通知（イメージ）</div>
+      <div class="tb">受注伝票の登録が完了しました。<br><b>印刷対象：</b><span class="num">1002345 / 1002346 / 1002347</span><br><b>登録件数：</b><span class="num">3</span>件　<b>要確認：</b><span class="num">0</span>件</div>
+    </div>
+    <div class="tcard err">
+      <div class="th"><svg class="ic"><use href="#i-alert"/></svg>ORDER BOT — 要確認（イメージ）</div>
+      <div class="tb">確認が必要なデータがあります。<br><b>対象：</b><span class="num">order_001.pdf</span><br><b>理由：</b>商品コードがマスタに存在しません。<br><b>対応：</b>商品コードを確認してください。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section id="s7">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">07 — AUTOMATION MODEL 2</div>
+    <h2>受注と同時に、在庫が動く。</h2>
+    <p class="sub">OCRで読んだ受注を在庫表へリアルタイム反映し、在庫不足・発注点割れを即検知する構想です。</p>
+  </div>
+  <div class="flow reveal">
+    <div class="fstep"><span class="fn en">01</span><div class="fico"><svg class="ic"><use href="#i-eye"/></svg></div><b>OCR読み取り</b><span>商品コード・商品名・数量を抽出</span></div>
+    <div class="fstep"><span class="fn en">02</span><div class="fico"><svg class="ic"><use href="#i-search"/></svg></div><b>マスタ照合</b><span>商品マスタ・在庫表と突き合わせ</span></div>
+    <div class="fstep"><span class="fn en">03</span><div class="fico"><svg class="ic"><use href="#i-layers"/></svg></div><b>在庫引き当て</b><span>在庫数から受注数量を減算</span></div>
+    <div class="fstep"><span class="fn en">04</span><div class="fico"><svg class="ic"><use href="#i-chart"/></svg></div><b>在庫表更新</b><span>リアルタイムに反映</span></div>
+    <div class="fstep"><span class="fn en">05</span><div class="fico"><svg class="ic"><use href="#i-bell"/></svg></div><b>不足を検知</b><span>在庫不足・発注点割れをTeamsへ</span></div>
+  </div>
+
+  <div class="stock reveal">
+    <div class="srow shead"><span>CODE</span><span class="r">現在庫</span><span class="r">受注</span><span class="r">更新後</span><span class="st">STATUS</span></div>
+    <div class="srow"><span class="num en">A-001</span><span class="r">50</span><span class="r">3</span><span class="r">47</span><span class="st ok">OK</span></div>
+    <div class="srow"><span class="num en">B-002</span><span class="r">20</span><span class="r">5</span><span class="r">15</span><span class="st wn">発注点(20)割れ</span></div>
+    <div class="srow alert"><span class="num en">C-003</span><span class="r">8</span><span class="r">10</span><span class="r minus">-2</span><span class="st ng">在庫不足</span></div>
+  </div>
+
+  <div class="teams-grid reveal">
+    <div class="tcard err">
+      <div class="th"><svg class="ic"><use href="#i-alert"/></svg>STOCK BOT — 在庫不足（イメージ）</div>
+      <div class="tb"><b>C-003</b>　現在庫 <span class="num">8</span> ／ 受注 <span class="num">10</span> ／ 不足 <span class="num">2</span><br><b>対応：</b>出荷可否または仕入予定を確認してください。</div>
+    </div>
+    <div class="tcard warn">
+      <div class="th"><svg class="ic"><use href="#i-bell"/></svg>STOCK BOT — 発注点割れ（イメージ）</div>
+      <div class="tb"><b>B-002</b>　更新後在庫 <span class="num">15</span> ／ 発注点 <span class="num">20</span><br><b>対応：</b>追加発注を検討してください。</div>
+    </div>
+  </div>
+
+  <div class="keymsg reveal">
+    <p class="en-big en">AI IS NOT JUST A CHATBOT.<br><span class="grad">IT RUNS YOUR WORKFLOW.</span></p>
+    <p>決まったルールの繰り返し ／ 紙・PDFからの転記 ／ CSV取込 ／ 結果の記録 ／ 不足の通知。<br>こうした業務こそ、AI×OCR×RPAの組み合わせと相性抜群です。</p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section id="s8">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">08 — DESIGN PRINCIPLES</div>
+    <h2>完全自動化を、急がない。</h2>
+    <p class="sub">設計段階で必ず織り込む6つの観点。</p>
+  </div>
+  <div class="cares stagger">
+    <div class="care"><svg class="ic"><use href="#i-eye"/></svg><h3>OCR誤読</h3><p>商品名・数量・日付・金額の読み違いを前提に、検証ルールをセットで設計する。</p></div>
+    <div class="care"><svg class="ic"><use href="#i-search"/></svg><h3>マスタ照合</h3><p>商品・得意先コードを必ず照合し、存在しないコードを検知する。</p></div>
+    <div class="care"><svg class="ic"><use href="#i-user"/></svg><h3>例外は人へ</h3><p>不明データ・在庫不足・重複伝票は自動処理せず、人の確認に回す。</p></div>
+    <div class="care"><svg class="ic"><use href="#i-clock"/></svg><h3>ログ管理</h3><p>いつ・何を・どのデータで処理したかを記録し、追跡可能に保つ。</p></div>
+    <div class="care"><svg class="ic"><use href="#i-shield"/></svg><h3>権限管理</h3><p>SMILEや在庫表を操作できる権限を制御し、影響範囲を限定する。</p></div>
+    <div class="care"><svg class="ic"><use href="#i-layers"/></svg><h3>最初は半自動</h3><p>人の確認をはさんだ半自動で開始し、精度を見ながら段階的に広げる。</p></div>
+  </div>
+</section>
+
+<!-- 09 -->
+<section id="s9" class="summary">
+  <div class="reveal">
+    <p class="en-huge en">FROM ME,<br><span class="grad">TO US.</span></p>
+    <p>
+      AIの違いは、<span class="key">接続できる業務基盤と任せられる作業</span>の違い。<br>
+      自部門に近いAIから始め、定型業務は <span class="key">Skills / GPTs / Gems / Copilot Studio</span> で再利用可能に。<br>
+      繰り返し業務は <span class="key">OCR・RPA・CSV・基幹システム・Teams通知</span> と組み合わせて自動化へ。<br><br>
+      個人の工夫で終わらせず、チームのプロセスに組み込む。<br>
+      それが、AI活用を組織の成果に変える道筋です。
+    </p>
+  </div>
+</section>
+
+<footer>
+  本資料は2026年6月時点の情報をもとに作成しています。各サービスの機能・名称は変更される場合があります。<br>
+  自動化モデル（06・07）は今後の構築を検討している構想であり、現時点で稼働しているものではありません。<br>
+  Claude は Anthropic PBC、ChatGPT は OpenAI, Inc.、Gemini は Google LLC、Copilot は Microsoft Corporation の商標または登録商標です。
+</footer>
+
+<script>
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .stagger, .flow, .levels').forEach(el => io.observe(el));
+const bar = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive: true });
+</script>
+</body>
+</html>

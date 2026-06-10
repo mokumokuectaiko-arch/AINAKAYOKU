@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHICH AI, FOR WHICH WORK? — 4つのAIを「使い方」で選ぶ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F7F4;
+  --panel:#FFFFFF;
+  --ink:#0E0E12;
+  --sub:#74757D;
+  --line:#E6E6E0;
+  --blue:#2B3CFF;
+  --claude:#D97757;
+  --gpt:#10A37F;
+  --gemini:#7B6FE0;
+  --copilot:#3B82F6;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg);color:var(--ink);
+  line-height:1.8;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+.en{font-family:'Inter','Noto Sans JP',sans-serif;letter-spacing:-.02em;}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+/* ───── progress / nav ───── */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:999;background:var(--ink);transition:width .1s linear;}
+nav{position:sticky;top:0;z-index:900;background:rgba(247,247,244,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:16px 28px;}
+.nav-brand{font-family:'Inter';font-weight:800;font-size:13px;letter-spacing:.12em;margin-right:auto;}
+nav a{color:var(--sub);text-decoration:none;font-size:11.5px;font-weight:700;letter-spacing:.08em;padding:6px 12px;border-radius:99px;transition:.3s var(--ease);}
+nav a:hover{color:var(--ink);background:#ECECE6;}
+@media(max-width:760px){nav a{display:none}}
+/* ───── hero ───── */
+.hero{position:relative;max-width:1200px;margin:0 auto;padding:110px 28px 40px;}
+.hero .eyebrow{display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--sub);margin-bottom:36px;}
+.hero .eyebrow::before{content:"";width:42px;height:1px;background:var(--ink);}
+.hero h1{font-family:'Inter';font-weight:900;font-size:clamp(46px,9.5vw,124px);line-height:1.0;letter-spacing:-.03em;}
+.hero h1 .l2{display:block;background:linear-gradient(92deg,var(--claude) 0%,var(--gpt) 34%,var(--gemini) 67%,var(--copilot) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero .jp{margin-top:34px;font-size:clamp(14px,1.8vw,17px);font-weight:700;line-height:2.1;}
+.hero .jp small{display:block;font-weight:400;color:var(--sub);font-size:.82em;margin-top:8px;}
+.hero-logos{display:flex;gap:14px;margin-top:48px;flex-wrap:wrap;}
+.hl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:10px 22px 10px 12px;font-family:'Inter';font-weight:700;font-size:13.5px;transition:.4s var(--ease);}
+.hl svg{width:30px;height:30px;}
+.hl:hover{transform:translateY(-4px);box-shadow:0 16px 32px rgba(14,14,18,.10);}
+/* marquee */
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:80px;padding:18px 0;}
+.mtrack{display:inline-block;animation:scroll 36s linear infinite;}
+.mtrack span{font-family:'Inter';font-weight:900;font-size:54px;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px #C9C9C2;padding-right:56px;}
+.mtrack span b{color:var(--ink);-webkit-text-stroke:0;font-weight:900;}
+@keyframes scroll{to{transform:translateX(-50%)}}
+/* ───── section common ───── */
+section{max-width:1200px;margin:0 auto;padding:110px 28px;}
+.sec-head{margin-bottom:56px;}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--blue);margin-bottom:20px;}
+.eyebrow::before{content:"";width:42px;height:1px;background:var(--blue);}
+.sec-head h2{font-size:clamp(26px,4.2vw,44px);font-weight:900;line-height:1.4;letter-spacing:.01em;}
+.sec-head .sub{margin-top:16px;color:var(--sub);font-size:14px;max-width:560px;}
+/* reveal */
+.reveal{opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);}
+.reveal.on{opacity:1;transform:none;filter:none;}
+.stagger>*{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.stagger.on>*{opacity:1;transform:none;}
+.stagger.on>*:nth-child(1){transition-delay:.04s}.stagger.on>*:nth-child(2){transition-delay:.10s}
+.stagger.on>*:nth-child(3){transition-delay:.16s}.stagger.on>*:nth-child(4){transition-delay:.22s}
+.stagger.on>*:nth-child(5){transition-delay:.28s}.stagger.on>*:nth-child(6){transition-delay:.34s}
+.stagger.on>*:nth-child(7){transition-delay:.40s}.stagger.on>*:nth-child(8){transition-delay:.46s}
+.stagger.on>*:nth-child(9){transition-delay:.52s}
+/* ───── 01 axes ───── */
+.axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;}
+.axis{background:var(--panel);padding:34px 26px;transition:.4s var(--ease);}
+.axis:hover{background:#FCFCF9;transform:scale(1.02);}
+.axis .n{font-family:'Inter';font-size:11px;font-weight:700;color:#B9B9B2;letter-spacing:.15em;}
+.axis svg.ic{width:26px;height:26px;margin:18px 0 14px;color:var(--ink);}
+.axis h3{font-size:14.5px;font-weight:700;line-height:1.6;}
+.axis p{font-size:11.5px;color:var(--sub);margin-top:6px;line-height:1.7;}
+.thesis{margin-top:64px;text-align:center;font-weight:900;font-size:clamp(19px,3.2vw,30px);line-height:2;}
+.thesis .strike{color:#C2C2BB;text-decoration:line-through;text-decoration-thickness:3px;}
+.thesis .grad{background:linear-gradient(92deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));-webkit-background-clip:text;background-clip:text;color:transparent;}
+/* ───── 02 AI cards ───── */
+.ai{background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:44px 40px;margin-bottom:28px;position:relative;overflow:hidden;}
+.ai::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;}
+.ai.claude::before{background:var(--claude);}
+.ai.gpt::before{background:var(--gpt);}
+.ai.gemini::before{background:linear-gradient(90deg,#4285F4,#9B72CB,#D96570);}
+.ai.copilot::before{background:linear-gradient(90deg,#26C6DA,#3B82F6,#9333EA);}
+.ai-top{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:10px;}
+.ai-top svg.logo{width:52px;height:52px;}
+.ai-top h3{font-family:'Inter';font-size:30px;font-weight:800;letter-spacing:-.02em;}
+.ai-top .en-tag{font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.22em;color:var(--sub);text-transform:uppercase;}
+.ai-top .jp-tag{margin-left:auto;font-size:13px;font-weight:700;}
+.ai.claude .jp-tag{color:var(--claude);}
+.ai.gpt .jp-tag{color:var(--gpt);}
+.ai.gemini .jp-tag{color:var(--gemini);}
+.ai.copilot .jp-tag{color:var(--copilot);}
+.feats{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:14px;margin-top:26px;}
+.feat{border:1px solid var(--line);border-radius:18px;padding:20px;transition:.35s var(--ease);}
+.feat:hover{transform:translateY(-4px);}
+.ai.claude .feat:hover{border-color:var(--claude);box-shadow:0 14px 28px rgba(217,119,87,.13);}
+.ai.gpt .feat:hover{border-color:var(--gpt);box-shadow:0 14px 28px rgba(16,163,127,.13);}
+.ai.gemini .feat:hover{border-color:var(--gemini);box-shadow:0 14px 28px rgba(123,111,224,.13);}
+.ai.copilot .feat:hover{border-color:var(--copilot);box-shadow:0 14px 28px rgba(59,130,246,.13);}
+.feat b{display:block;font-family:'Inter','Noto Sans JP';font-size:15px;font-weight:800;letter-spacing:-.01em;}
+.feat p{font-size:12px;color:var(--sub);margin-top:5px;line-height:1.7;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.chip{font-size:10.5px;font-weight:700;border-radius:99px;padding:3px 11px;}
+.ai.claude .chip{background:#FAEEE8;color:#A85737;}
+.ai.gpt .chip{background:#E5F4EF;color:#0A7C61;}
+.ai.gemini .chip{background:#EEEcFB;color:#5B4EC9;}
+.ai.copilot .chip{background:#E8F0FD;color:#2563C4;}
+.note{margin-top:20px;font-size:11.5px;color:var(--sub);display:flex;gap:8px;align-items:flex-start;}
+.note svg.ic{width:15px;height:15px;margin-top:4px;}
+/* ───── 03 matrix ───── */
+.matrix{background:var(--panel);border:1px solid var(--line);border-radius:24px;overflow:hidden;}
+.mrow{display:grid;grid-template-columns:1fr repeat(4,76px);align-items:center;padding:0 10px 0 26px;border-bottom:1px solid var(--line);transition:.3s;}
+.mrow:last-child{border-bottom:none;}
+.mrow:not(.mhead):hover{background:#FBFBF7;}
+.mhead{background:#FAFAF6;}
+.mhead .mcell{padding:16px 0;display:flex;justify-content:center;}
+.mhead svg{width:26px;height:26px;}
+.mgoal{display:flex;align-items:center;gap:14px;padding:17px 0;font-size:13px;font-weight:700;}
+.mgoal svg.ic{width:18px;height:18px;color:var(--sub);}
+.mcell{display:flex;justify-content:center;}
+.dot{width:13px;height:13px;border-radius:50%;}
+.dot.c{background:var(--claude);}
+.dot.g{background:var(--gpt);}
+.dot.m{background:linear-gradient(135deg,#4285F4,#9B72CB);}
+.dot.p{background:var(--copilot);}
+.dot.off{width:5px;height:5px;background:#DDDDD6;}
+.legend{display:flex;gap:22px;justify-content:flex-end;margin-top:14px;font-size:11px;color:var(--sub);font-weight:700;}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ink);margin-right:6px;}
+.legend i.off{width:5px;height:5px;background:#DDDDD6;vertical-align:2px;}
+/* ───── 04 daily ───── */
+.daily-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;}
+.daily{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px 24px;transition:.4s var(--ease);}
+.daily:hover{transform:translateY(-5px);box-shadow:0 18px 36px rgba(14,14,18,.08);}
+.daily h3{display:flex;align-items:center;gap:10px;font-family:'Inter';font-size:17px;font-weight:800;margin-bottom:18px;}
+.daily h3 svg{width:26px;height:26px;}
+.daily ul{list-style:none;}
+.daily li{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:500;padding:8px 0;border-bottom:1px solid #F0F0EA;}
+.daily li:last-child{border:none;}
+.daily li svg.ic{width:14px;height:14px;}
+.daily.claude li svg{color:var(--claude);}
+.daily.gpt li svg{color:var(--gpt);}
+.daily.gemini li svg{color:var(--gemini);}
+.daily.copilot li svg{color:var(--copilot);}
+.combo{margin-top:56px;background:var(--ink);color:#fff;border-radius:24px;padding:40px 36px;display:flex;align-items:center;gap:28px;flex-wrap:wrap;}
+.combo .t{font-weight:900;font-size:clamp(16px,2.4vw,21px);line-height:1.9;}
+.combo .flowmini{display:flex;align-items:center;gap:10px;font-family:'Inter';font-weight:700;font-size:12px;flex-wrap:wrap;margin-left:auto;}
+.combo .step{border:1px solid rgba(255,255,255,.3);border-radius:99px;padding:7px 16px;}
+.combo .step.s1{border-color:var(--gpt);color:#7FE0C8;}
+.combo .step.s2{border-color:var(--claude);color:#F2B49C;}
+.combo .step.s3{border-color:var(--copilot);color:#9DC2FB;}
+.combo .ar{opacity:.5;}
+/* ───── 05 automation ───── */
+.flow{display:flex;align-items:stretch;gap:0;margin-top:20px;overflow-x:auto;padding-bottom:10px;}
+.fstep{flex:1;min-width:150px;position:relative;padding:28px 18px 24px;border-left:1px solid var(--line);}
+.fstep:first-child{border-left:none;}
+.fstep .fn{font-family:'Inter';font-size:11px;font-weight:700;color:#B9B9B2;letter-spacing:.15em;}
+.fstep .fico{width:52px;height:52px;border-radius:16px;background:var(--panel);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin:16px 0 14px;}
+.fstep .fico svg.ic{width:24px;height:24px;}
+.fstep b{font-size:14px;font-weight:800;display:block;}
+.fstep span{font-size:11px;color:var(--sub);display:block;margin-top:5px;line-height:1.7;}
+.flow.on .fstep{animation:rise .7s var(--ease) backwards;}
+.flow.on .fstep:nth-child(1){animation-delay:.05s}.flow.on .fstep:nth-child(2){animation-delay:.18s}
+.flow.on .fstep:nth-child(3){animation-delay:.31s}.flow.on .fstep:nth-child(4){animation-delay:.44s}
+.flow.on .fstep:nth-child(5){animation-delay:.57s}
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.vision{margin-top:18px;font-size:11.5px;color:var(--sub);}
+/* ladder */
+.ladder{display:flex;align-items:flex-end;gap:12px;margin-top:48px;}
+.rung{flex:1;border-radius:14px 14px 4px 4px;padding:18px 16px;display:flex;flex-direction:column;justify-content:flex-end;transition:.4s var(--ease);}
+.rung:hover{transform:translateY(-6px);}
+.rung .ln{font-family:'Inter';font-size:11px;font-weight:800;letter-spacing:.12em;opacity:.65;}
+.rung b{font-size:13.5px;font-weight:800;margin-top:4px;}
+.rung span{font-size:10.5px;margin-top:4px;opacity:.75;line-height:1.6;}
+.rung.r1{height:120px;background:#E9EAF0;color:var(--ink);}
+.rung.r2{height:160px;background:#CDD2F2;color:#23274E;}
+.rung.r3{height:200px;background:#8C97E8;color:#fff;}
+.rung.r4{height:240px;background:var(--blue);color:#fff;}
+.ladder.on .rung{animation:rise .8s var(--ease) backwards;}
+.ladder.on .rung:nth-child(1){animation-delay:.05s}.ladder.on .rung:nth-child(2){animation-delay:.2s}
+.ladder.on .rung:nth-child(3){animation-delay:.35s}.ladder.on .rung:nth-child(4){animation-delay:.5s}
+@media(max-width:680px){.ladder{flex-wrap:wrap}.rung{min-width:42%}}
+/* ───── 06 summary ───── */
+.summary{border-top:1px solid var(--line);padding-top:90px;}
+.picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:48px;}
+.pick{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:30px 26px;transition:.4s var(--ease);}
+.pick:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(14,14,18,.09);}
+.pick .q{font-size:13px;font-weight:700;line-height:1.8;min-height:66px;}
+.pick .a{display:flex;align-items:center;gap:10px;margin-top:18px;font-family:'Inter';font-weight:800;font-size:18px;}
+.pick .a svg{width:30px;height:30px;}
+.pick .bar{height:3px;border-radius:2px;margin-top:16px;}
+.closing{margin-top:90px;text-align:center;}
+.closing .en-big{font-family:'Inter';font-weight:900;font-size:clamp(30px,6vw,68px);letter-spacing:-.03em;line-height:1.1;}
+.closing .en-big .grad{background:linear-gradient(92deg,var(--claude),var(--gpt),var(--gemini),var(--copilot));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.closing p{margin-top:24px;font-size:14px;font-weight:700;color:var(--sub);}
+footer{border-top:1px solid var(--line);text-align:center;padding:40px 28px 52px;color:#A3A39C;font-size:10.5px;line-height:2;}
+@media(max-width:760px){
+  section{padding:70px 20px;}
+  .hero{padding:70px 20px 30px;}
+  .mrow{grid-template-columns:1fr repeat(4,44px);padding-left:16px;}
+  .ai{padding:30px 22px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SVG defs -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gemGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285F4"/><stop offset=".55" stop-color="#9B72CB"/><stop offset="1" stop-color="#D96570"/></linearGradient>
+  <linearGradient id="cpGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26C6DA"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#9333EA"/></linearGradient>
+  <symbol id="logo-claude" viewBox="0 0 100 100"><g fill="#D97757"><circle cx="50" cy="50" r="11"/><rect x="46" y="2" width="8" height="32" rx="4"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(33 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(66 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(99 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(132 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(165 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(198 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(231 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(264 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(297 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(330 50 50)"/></g></symbol>
+  <symbol id="logo-openai" viewBox="0 0 100 100"><g fill="none" stroke="#16161A" stroke-width="6.5"><rect x="36" y="7" width="28" height="56" rx="14"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(120 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(120 50 50)"/></g></symbol>
+  <symbol id="logo-gemini" viewBox="0 0 100 100"><path fill="url(#gemGrad)" d="M50 2 C56 32 68 44 98 50 C68 56 56 68 50 98 C44 68 32 56 2 50 C32 44 44 32 50 2 Z"/></symbol>
+  <symbol id="logo-copilot" viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="url(#cpGrad)"/><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><circle cx="37" cy="50" r="16"/><circle cx="63" cy="50" r="16"/></g></symbol>
+  <!-- line icons -->
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a5 5 0 0 0 7.1 0l3-3a5 5 0 0 0-7.1-7.1L11.5 4.9"/><path d="M14 10.5a5 5 0 0 0-7.1 0l-3 3a5 5 0 0 0 7.1 7.1l1.5-1.5"/></symbol>
+  <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="M2 12l10 5 10-5"/><path d="M2 17l10 5 10-5"/></symbol>
+  <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M4 4l7 16 2.5-6.5L20 11 4 4z"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6 12 13 2 6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 16v-5"/><path d="M13 16V8"/><path d="M18 16v-8"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-browser" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M2 8h20"/><path d="M5.5 5.7h.01"/><path d="M8.2 5.7h.01"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2c1 5.5 3.5 8 10 10-6.5 2-9 4.5-10 10-1-5.5-3.5-8-10-10 6.5-2 9-4.5 10-10z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 3v18"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M19.1 4.9 17 7"/><path d="M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+</defs></svg>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-in">
+    <span class="nav-brand en">AI GUIDE — 01</span>
+    <a href="#s1">PERSPECTIVE</a><a href="#s2">FEATURES</a><a href="#s3">MATRIX</a><a href="#s4">USE CASES</a><a href="#s5">NEXT STEP</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="eyebrow en">EMPLOYEE GUIDE / 2026.06 EDITION</div>
+  <h1 class="en">WHICH AI,<span class="l2">FOR WHICH WORK?</span></h1>
+  <p class="jp">AIの違いは「賢さ」ではなく、<b>あなたの仕事との「つながり方」</b>。<small>Claude / ChatGPT / Gemini / Copilot — 4つのAIを「使い方」で選ぶためのガイドです。</small></p>
+  <div class="hero-logos">
+    <div class="hl"><svg><use href="#logo-claude"/></svg>Claude</div>
+    <div class="hl"><svg><use href="#logo-openai"/></svg>ChatGPT</div>
+    <div class="hl"><svg><use href="#logo-gemini"/></svg>Gemini</div>
+    <div class="hl"><svg><use href="#logo-copilot"/></svg>Copilot</div>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="mtrack en">
+    <span>CLAUDE</span><span><b>CHATGPT</b></span><span>GEMINI</span><span><b>COPILOT</b></span><span>CLAUDE</span><span><b>CHATGPT</b></span><span>GEMINI</span><span><b>COPILOT</b></span>
+  </div>
+</div>
+
+<!-- 01 PERSPECTIVE -->
+<section id="s1">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">01 — PERSPECTIVE</div>
+    <h2>差がつくのは、この6つ。</h2>
+    <p class="sub">回答の上手さで比べても、実務の違いは見えません。見るべきは仕事とのつながり方です。</p>
+  </div>
+  <div class="axes stagger">
+    <div class="axis"><span class="n en">01</span><svg class="ic"><use href="#i-link"/></svg><h3>連携できるアプリ</h3><p>Google か Office か、ブラウザか</p></div>
+    <div class="axis"><span class="n en">02</span><svg class="ic"><use href="#i-db"/></svg><h3>届く業務データ</h3><p>メール・資料・表にアクセスできるか</p></div>
+    <div class="axis"><span class="n en">03</span><svg class="ic"><use href="#i-layers"/></svg><h3>複数ステップ処理</h3><p>調べて→整理して→形に、まで自走するか</p></div>
+    <div class="axis"><span class="n en">04</span><svg class="ic"><use href="#i-cursor"/></svg><h3>画面操作の支援</h3><p>ブラウザやPCの作業を手伝えるか</p></div>
+    <div class="axis"><span class="n en">05</span><svg class="ic"><use href="#i-repeat"/></svg><h3>定型業務の再利用</h3><p>社内ルールを覚えて毎回同じ品質か</p></div>
+    <div class="axis"><span class="n en">06</span><svg class="ic"><use href="#i-box"/></svg><h3>成果物の形式</h3><p>文書・スライド・画像・HTMLで出せるか</p></div>
+  </div>
+  <p class="thesis reveal"><span class="strike">どれが一番賢いか</span>　ではなく<br><span class="grad">自分の仕事に、どれが一番近いか。</span></p>
+</section>
+
+<!-- 02 FEATURES -->
+<section id="s2">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">02 — UNIQUE FEATURES</div>
+    <h2>4つのAI、それぞれの「武器」。</h2>
+    <p class="sub">全部覚えなくて大丈夫。「こんなことができる」と知っておくだけで選び方が変わります。</p>
+  </div>
+
+  <div class="ai claude reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-claude"/></svg>
+      <div><h3 class="en">Claude</h3><span class="en-tag en">ANTHROPIC</span></div>
+      <span class="jp-tag">じっくり読む・きちんと書く・作業まで任せる</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Claude Code</b><p>コードを読み・直し・実行する開発エージェント</p><div class="chips"><span class="chip">HTML修正</span><span class="chip">CSV自動化</span><span class="chip">社内ツール</span></div></div>
+      <div class="feat"><b>Claude in Chrome</b><p>ブラウザ画面を見ながら作業をサポート</p><div class="chips"><span class="chip">ページ要約</span><span class="chip">フォーム入力</span><span class="chip">管理画面の確認</span></div></div>
+      <div class="feat"><b>Cowork</b><p>複数ステップの仕事を一緒に進める</p><div class="chips"><span class="chip">報告書づくり</span><span class="chip">手順書の整備</span></div></div>
+      <div class="feat"><b>Skills</b><p>社内ルールを覚えて、毎回同じ品質で</p><div class="chips"><span class="chip">メール返信の型</span><span class="chip">議事録の型</span></div></div>
+      <div class="feat"><b>Artifacts</b><p>成果物をその場で作ってプレビュー</p><div class="chips"><span class="chip">資料</span><span class="chip">図解</span><span class="chip">HTML</span></div></div>
+      <div class="feat"><b>Projects</b><p>資料と前提を登録して、続きから相談</p><div class="chips"><span class="chip">部門ナレッジ</span><span class="chip">継続相談</span></div></div>
+      <div class="feat"><b>モバイル連携</b><p>スマホから作業を指示・確認</p><div class="chips"><span class="chip">外出先から進捗チェック</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai gpt reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-openai"/></svg>
+      <div><h3 class="en">ChatGPT</h3><span class="en-tag en">OPENAI</span></div>
+      <span class="jp-tag">調べる・ひらめく・つくる、の万能選手</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Deep Research</b><p>Webを深く調べてレポートにまとめる</p><div class="chips"><span class="chip">業界調査</span><span class="chip">競合調査</span><span class="chip">トレンド</span></div></div>
+      <div class="feat"><b>エージェントモード</b><p>調査から表作成まで、AIが自走する</p><div class="chips"><span class="chip">情報収集→表</span><span class="chip">データ整理</span></div></div>
+      <div class="feat"><b>画像生成</b><p>言葉から画像をつくる</p><div class="chips"><span class="chip">バナー案</span><span class="chip">図解</span><span class="chip">SNS画像</span></div></div>
+      <div class="feat"><b>ファイル分析</b><p>PDF・Excel・CSVを読み解く</p><div class="chips"><span class="chip">要約</span><span class="chip">集計</span><span class="chip">傾向分析</span></div></div>
+      <div class="feat"><b>Codex</b><p>コードの作成・修正・レビュー</p><div class="chips"><span class="chip">スクリプト</span><span class="chip">バグ修正</span></div></div>
+      <div class="feat"><b>GPTs</b><p>自分仕様のChatGPTを作って共有</p><div class="chips"><span class="chip">説明文GPT</span><span class="chip">返信GPT</span></div></div>
+      <div class="feat"><b>Canvas</b><p>横画面でAIと一緒に推敲する</p><div class="chips"><span class="chip">企画書</span><span class="chip">文章磨き</span></div></div>
+      <div class="feat"><b>コネクタ</b><p>Drive などのファイルを直接参照</p><div class="chips"><span class="chip">クラウド資料を読む</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai gemini reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-gemini"/></svg>
+      <div><h3 class="en">Gemini</h3><span class="en-tag en">GOOGLE</span></div>
+      <span class="jp-tag">Googleの中にいるAI</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Workspace連携</b><p>Gmail・Drive・Docs・Sheets・Meetと直結</p><div class="chips"><span class="chip">メール要約</span><span class="chip">資料検索</span><span class="chip">会議要約</span></div></div>
+      <div class="feat"><b>NotebookLM</b><p>資料を読み込ませる自分専用ノート</p><div class="chips"><span class="chip">マニュアルに質問</span><span class="chip">音声解説</span></div></div>
+      <div class="feat"><b>Deep Research</b><p>Google検索 × 調査レポート</p><div class="chips"><span class="chip">競合調査</span><span class="chip">需要調査</span></div></div>
+      <div class="feat"><b>画像・動画生成</b><p>画像も、動画もつくれる</p><div class="chips"><span class="chip">商品イメージ</span><span class="chip">短尺動画</span></div></div>
+      <div class="feat"><b>Gemini in Chrome</b><p>開いているページにその場で質問</p><div class="chips"><span class="chip">要点整理</span><span class="chip">理解の補助</span></div></div>
+      <div class="feat"><b>Gems</b><p>目的別のカスタムGemini</p><div class="chips"><span class="chip">議事録Gem</span><span class="chip">翻訳Gem</span></div></div>
+      <div class="feat"><b>Gemini CLI</b><p>コーディング支援ツール</p><div class="chips"><span class="chip">スクリプト作成</span></div></div>
+    </div>
+  </div>
+
+  <div class="ai copilot reveal">
+    <div class="ai-top">
+      <svg class="logo"><use href="#logo-copilot"/></svg>
+      <div><h3 class="en">Copilot</h3><span class="en-tag en">MICROSOFT</span></div>
+      <span class="jp-tag">いつものOfficeに入っているAI</span>
+    </div>
+    <div class="feats stagger">
+      <div class="feat"><b>Word / Excel / PowerPoint</b><p>Officeの中で作成・分析・スライド化</p><div class="chips"><span class="chip">報告書</span><span class="chip">関数相談</span><span class="chip">資料生成</span></div></div>
+      <div class="feat"><b>Outlook / Teams</b><p>メールと会議を、その場でさばく</p><div class="chips"><span class="chip">返信案</span><span class="chip">会議要約</span><span class="chip">タスク整理</span></div></div>
+      <div class="feat"><b>Copilot Pages</b><p>AIとチームの共同編集ページ</p><div class="chips"><span class="chip">ナレッジ共有</span></div></div>
+      <div class="feat"><b>Researcher / Analyst</b><p>調査・分析の専門エージェント</p><div class="chips"><span class="chip">横断調査</span><span class="chip">深掘り分析</span></div></div>
+      <div class="feat"><b>Copilot Studio</b><p>社内向けのBot・エージェントを作る</p><div class="chips"><span class="chip">FAQ Bot</span><span class="chip">申請案内</span></div></div>
+    </div>
+    <p class="note"><svg class="ic"><use href="#i-info"/></svg>Office内での利用には Microsoft 365 Copilot の有償ライセンスが必要です。</p>
+  </div>
+</section>
+
+<!-- 03 MATRIX -->
+<section id="s3">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">03 — MATRIX</div>
+    <h2>やりたいことから、逆引きする。</h2>
+    <p class="sub">迷ったらここに戻る。9つの「やりたいこと」と4つのAIの相性マップです。</p>
+  </div>
+  <div class="matrix reveal">
+    <div class="mrow mhead">
+      <div class="mgoal en" style="font-size:11px;color:var(--sub);letter-spacing:.2em;">GOAL</div>
+      <div class="mcell"><svg><use href="#logo-claude"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-openai"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-gemini"/></svg></div>
+      <div class="mcell"><svg><use href="#logo-copilot"/></svg></div>
+    </div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-doc"/></svg>長い資料・マニュアルを整理する</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-search"/></svg>Webを調査してレポートにする</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-mail"/></svg>Gmail・Driveの情報を活用する</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-grid"/></svg>Word・Excel・Teamsで作業する</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-code"/></svg>コードや社内ツールを作る</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-browser"/></svg>ブラウザ上の作業を手伝ってもらう</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot off"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-repeat"/></svg>定型業務をルール化して再利用する</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-image"/></svg>画像・バナー・説明図を作る</div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot m"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+    <div class="mrow"><div class="mgoal"><svg class="ic"><use href="#i-box"/></svg>文書・スライド・HTMLをその場で形にする</div><div class="mcell"><span class="dot c"></span></div><div class="mcell"><span class="dot g"></span></div><div class="mcell"><span class="dot off"></span></div><div class="mcell"><span class="dot p"></span></div></div>
+  </div>
+  <div class="legend reveal"><span><i></i>得意</span><span><i class="off"></i>他のAIが向いている</span></div>
+</section>
+
+<!-- 04 USE CASES -->
+<section id="s4">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">04 — DAILY USE CASES</div>
+    <h2>明日から、この仕事で試す。</h2>
+  </div>
+  <div class="daily-wrap stagger">
+    <div class="daily claude">
+      <h3><svg><use href="#logo-claude"/></svg>Claude</h3>
+      <ul>
+        <li><svg class="ic"><use href="#i-check"/></svg>長い社内資料の要約</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>マニュアルの作り直し</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>議事録のフォーマット統一</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>ルールに沿ったメール返信</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Web画面を見ながら確認作業</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>HTML・コード修正の相談</li>
+      </ul>
+    </div>
+    <div class="daily gpt">
+      <h3><svg><use href="#logo-openai"/></svg>ChatGPT</h3>
+      <ul>
+        <li><svg class="ic"><use href="#i-check"/></svg>調査テーマの整理</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>商品説明文を複数パターン</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>バナー・商品画像の案出し</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>PDF・Excelの要約</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>CSVの整理</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>企画・改善案のブレスト</li>
+      </ul>
+    </div>
+    <div class="daily gemini">
+      <h3><svg><use href="#logo-gemini"/></svg>Gemini</h3>
+      <ul>
+        <li><svg class="ic"><use href="#i-check"/></svg>Gmailの要約</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Drive資料の整理</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Docsの文章作成</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Sheetsの表整理</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>NotebookLMで資料に質問</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Google検索×調査</li>
+      </ul>
+    </div>
+    <div class="daily copilot">
+      <h3><svg><use href="#logo-copilot"/></svg>Copilot</h3>
+      <ul>
+        <li><svg class="ic"><use href="#i-check"/></svg>Word文書の作成</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Excelの表分析</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>PowerPoint資料の作成</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Outlookの返信案</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>Teams会議の整理</li>
+        <li><svg class="ic"><use href="#i-check"/></svg>社内FAQの作成</li>
+      </ul>
+    </div>
+  </div>
+  <div class="combo reveal">
+    <p class="t">組み合わせると、<br>もっと強い。</p>
+    <div class="flowmini en">
+      <span class="step s1">ChatGPT で調査</span><span class="ar">→</span>
+      <span class="step s2">Claude で報告書化</span><span class="ar">→</span>
+      <span class="step s3">Copilot でスライドに</span>
+    </div>
+  </div>
+</section>
+
+<!-- 05 AUTOMATION -->
+<section id="s5">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">05 — NEXT STEP</div>
+    <h2>「毎回やっている作業」は、<br>なくせる。</h2>
+    <p class="sub">AIはチャットだけではありません。OCRやRPA、社内システムと組み合わせると、くり返し作業そのものを減らせます。</p>
+  </div>
+  <div class="flow reveal">
+    <div class="fstep"><span class="fn en">01</span><div class="fico"><svg class="ic"><use href="#i-doc"/></svg></div><b>伝票が届く</b><span>PDF・スキャン・メール添付</span></div>
+    <div class="fstep"><span class="fn en">02</span><div class="fico"><svg class="ic"><use href="#i-eye"/></svg></div><b>OCRで読み取り</b><span>紙の文字をデータ化</span></div>
+    <div class="fstep"><span class="fn en">03</span><div class="fico"><svg class="ic"><use href="#i-spark"/></svg></div><b>AIが整理</b><span>得意先・商品・数量を項目に整える</span></div>
+    <div class="fstep"><span class="fn en">04</span><div class="fico"><svg class="ic"><use href="#i-gear"/></svg></div><b>システムに登録</b><span>CSVにして基幹システムへ</span></div>
+    <div class="fstep"><span class="fn en">05</span><div class="fico"><svg class="ic"><use href="#i-bell"/></svg></div><b>結果をお知らせ</b><span>完了・要確認をTeamsへ通知</span></div>
+  </div>
+  <p class="vision">※ 今後目指していく自動化の構想イメージです。確認をはさみながら段階的に進めます。</p>
+
+  <div class="ladder reveal">
+    <div class="rung r1"><span class="ln en">STEP 1</span><b>相談する</b><span>文章・要約・調査</span></div>
+    <div class="rung r2"><span class="ln en">STEP 2</span><b>ファイルを処理する</b><span>PDF・CSV・Excel</span></div>
+    <div class="rung r3"><span class="ln en">STEP 3</span><b>業務に反映する</b><span>CSV作成・表の更新</span></div>
+    <div class="rung r4"><span class="ln en">STEP 4</span><b>自動化につなげる</b><span>登録・通知まで（将来の姿）</span></div>
+  </div>
+</section>
+
+<!-- 06 SUMMARY -->
+<section id="s6" class="summary">
+  <div class="sec-head reveal">
+    <div class="eyebrow en">06 — CONCLUSION</div>
+    <h2>あなたの仕事は、どこから始まる？</h2>
+  </div>
+  <div class="picks stagger">
+    <div class="pick"><p class="q">メールとOfficeが仕事の中心。WordやTeamsの中で手伝ってほしい。</p><div class="a en"><svg><use href="#logo-copilot"/></svg>Copilot</div><div class="bar" style="background:linear-gradient(90deg,#26C6DA,#3B82F6,#9333EA);"></div></div>
+    <div class="pick"><p class="q">GmailやDrive、スプレッドシートなどGoogleのサービスを毎日使う。</p><div class="a en"><svg><use href="#logo-gemini"/></svg>Gemini</div><div class="bar" style="background:linear-gradient(90deg,#4285F4,#9B72CB,#D96570);"></div></div>
+    <div class="pick"><p class="q">調査もアイデア出しも画像も。最初の相談相手がほしい。</p><div class="a en"><svg><use href="#logo-openai"/></svg>ChatGPT</div><div class="bar" style="background:var(--gpt);"></div></div>
+    <div class="pick"><p class="q">長い資料、きちんとした文章、決まった手順の仕事の品質を上げたい。</p><div class="a en"><svg><use href="#logo-claude"/></svg>Claude</div><div class="bar" style="background:var(--claude);"></div></div>
+  </div>
+  <div class="closing reveal">
+    <p class="en-big en">START SMALL,<br><span class="grad">THINK BIG.</span></p>
+    <p>まずは1つ、自分の仕事に近いAIから。<br>「これ、AIにやってもらえるかも？」と思ったときが始めどきです。</p>
+  </div>
+</section>
+
+<footer>
+  本資料は2026年6月時点の情報をもとに作成しています。各サービスの機能・名称は変更される場合があります。<br>
+  Claude は Anthropic PBC、ChatGPT は OpenAI, Inc.、Gemini は Google LLC、Copilot は Microsoft Corporation の商標または登録商標です。
+</footer>
+
+<script>
+const io = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .stagger, .flow, .ladder').forEach(el => io.observe(el));
+const bar = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive: true });
+</script>
+</body>
+</html>
