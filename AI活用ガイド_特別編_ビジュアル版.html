@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHEN AI GETS HANDS. — VISUAL EDITION</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0C16;
+  --panel:#11131F;
+  --panel2:#161927;
+  --ink:#F1F2F7;
+  --sub:#8F92A6;
+  --line:#222536;
+  --local:#FFB36B;
+  --browser:#5EE0C8;
+  --agent:#8E9BFF;
+  --cross:#E985D8;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--ink);line-height:1.8;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.en{font-family:'Inter','Noto Sans JP',sans-serif;letter-spacing:-.02em;}
+.mono{font-family:'JetBrains Mono',monospace;}
+svg.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+::selection{background:var(--agent);color:#0A0C16;}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:999;background:linear-gradient(90deg,var(--local),var(--browser),var(--agent),var(--cross));transition:width .1s linear;}
+nav{position:sticky;top:0;z-index:900;background:rgba(10,12,22,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
+.nav-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:6px;padding:16px 28px;}
+.nav-brand{font-family:'Inter';font-weight:800;font-size:13px;letter-spacing:.12em;margin-right:auto;}
+nav a{color:var(--sub);text-decoration:none;font-size:11px;font-weight:700;letter-spacing:.08em;padding:6px 11px;border-radius:99px;transition:.3s var(--ease);}
+nav a:hover{color:var(--ink);background:#1C1F30;}
+@media(max-width:760px){nav a{display:none}}
+/* ── hero ── */
+.hero{position:relative;max-width:1200px;margin:0 auto;padding:130px 28px 70px;text-align:center;}
+.glow{position:absolute;border-radius:50%;filter:blur(120px);opacity:.34;z-index:0;pointer-events:none;}
+.glow1{width:500px;height:500px;background:#5A2BD9;top:-180px;right:-60px;animation:drift 13s ease-in-out infinite;}
+.glow2{width:420px;height:420px;background:#0E5F55;bottom:-200px;left:-140px;animation:drift 13s ease-in-out infinite reverse;}
+@keyframes drift{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,30px)}}
+.hero>*{position:relative;z-index:1;}
+.hero .eyebrow{justify-content:center;display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--sub);margin-bottom:36px;}
+.hero h1{font-family:'Inter';font-weight:900;font-size:clamp(48px,10.5vw,140px);line-height:.98;letter-spacing:-.035em;}
+.hero h1 .l2{display:block;background:linear-gradient(92deg,var(--local) 0%,var(--browser) 33%,var(--agent) 66%,var(--cross) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero .jp{margin-top:30px;font-size:clamp(13px,1.7vw,16px);font-weight:700;color:var(--sub);}
+.hero .jp b{color:var(--ink);}
+/* concept pills */
+.cstrip{display:flex;justify-content:center;gap:12px;margin-top:50px;flex-wrap:wrap;}
+.cpill{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:10px 22px;font-family:'Inter';font-weight:800;font-size:12.5px;letter-spacing:.06em;transition:.4s var(--ease);}
+.cpill i{width:9px;height:9px;border-radius:50%;}
+.cpill:hover{transform:translateY(-4px);}
+.cpill.k1 i{background:var(--local);box-shadow:0 0 10px var(--local);}
+.cpill.k2 i{background:var(--browser);box-shadow:0 0 10px var(--browser);}
+.cpill.k3 i{background:var(--agent);box-shadow:0 0 10px var(--agent);}
+.cpill.k4 i{background:var(--cross);box-shadow:0 0 10px var(--cross);}
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:84px;padding:18px 0;}
+.mtrack{display:inline-block;animation:scroll 38s linear infinite;}
+.mtrack span{font-family:'Inter';font-weight:900;font-size:52px;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px #2E3147;padding-right:56px;}
+.mtrack span b{color:var(--ink);-webkit-text-stroke:0;}
+@keyframes scroll{to{transform:translateX(-50%)}}
+/* ── chapter common ── */
+section{max-width:1200px;margin:0 auto;padding:120px 28px;}
+.ch{display:grid;grid-template-columns:minmax(300px,5fr) minmax(320px,6fr);gap:56px;align-items:center;}
+@media(max-width:880px){.ch{grid-template-columns:1fr;gap:40px;}}
+.ch-label{display:flex;align-items:center;gap:14px;font-family:'Inter';font-size:11px;font-weight:700;letter-spacing:.3em;margin-bottom:18px;}
+.ch-label::before{content:"";width:42px;height:1px;background:currentColor;}
+.ch-num{font-family:'Inter';font-weight:900;font-size:clamp(70px,9vw,110px);line-height:1;letter-spacing:-.04em;opacity:.13;display:block;margin-bottom:-20px;}
+.ch h2{font-size:clamp(28px,4.4vw,46px);font-weight:900;line-height:1.4;}
+.ch .def{margin-top:14px;color:var(--sub);font-size:13px;}
+.ch .tools{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;}
+.tool{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:7px 16px 7px 9px;font-family:'Inter','Noto Sans JP';font-weight:700;font-size:11.5px;transition:.3s var(--ease);}
+.tool svg{width:20px;height:20px;}
+.tool:hover{transform:translateY(-3px);border-color:#33364A;}
+.ch .uses{list-style:none;margin-top:26px;}
+.ch .uses li{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;padding:9px 0;border-bottom:1px solid var(--line);}
+.ch .uses li:last-child{border:none;}
+.ch .uses svg.ic{width:17px;height:17px;}
+.s-local .uses svg{color:var(--local);}
+.s-browser .uses svg{color:var(--browser);}
+.s-agent .uses svg{color:var(--agent);}
+.s-cross .uses svg{color:var(--cross);}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden;margin-top:60px;}
+.stat{background:var(--bg);padding:26px 22px;}
+.stat .v{font-family:'Inter';font-weight:900;font-size:clamp(30px,4.4vw,52px);letter-spacing:-.03em;line-height:1.05;}
+.s-local .stat .v{color:var(--local);}
+.s-browser .stat .v{color:var(--browser);}
+.s-agent .stat .v{color:var(--agent);}
+.s-cross .stat .v{color:var(--cross);}
+.stat .k{font-size:10.5px;color:var(--sub);font-weight:700;margin-top:8px;line-height:1.65;}
+.src-tag{margin-top:14px;font-family:'Inter';font-size:9.5px;font-weight:700;letter-spacing:.18em;color:#4E5060;}
+/* reveal */
+.reveal{opacity:0;transform:translateY(40px);filter:blur(6px);transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);}
+.reveal.on{opacity:1;transform:none;filter:none;}
+/* ═══ VISUAL: terminal ═══ */
+.vframe{border:1px solid var(--line);border-radius:22px;background:var(--panel);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);}
+.vhead{display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid var(--line);background:var(--panel2);}
+.vhead i{width:10px;height:10px;border-radius:50%;background:#2E3147;}
+.vhead i:first-child{background:#FF5F57;}
+.vhead i:nth-child(2){background:#FEBC2E;}
+.vhead i:nth-child(3){background:#28C840;}
+.vhead .vt{margin-left:10px;font-family:'JetBrains Mono';font-size:10.5px;color:var(--sub);letter-spacing:.05em;}
+.term-body{padding:24px 24px 28px;font-family:'JetBrains Mono';font-size:12px;line-height:2.15;min-height:240px;}
+.tline{opacity:0;}
+.tline .p{color:var(--local);}
+.tline .ok{color:#28C840;}
+.tline .dim{color:var(--sub);}
+.tline.t1{animation:tl1 11s linear infinite;}
+.tline.t2{animation:tl2 11s linear infinite;}
+.tline.t3{animation:tl3 11s linear infinite;}
+.tline.t4{animation:tl4 11s linear infinite;}
+.tline.t5{animation:tl5 11s linear infinite;}
+.tline.t6{animation:tl6 11s linear infinite;}
+@keyframes tl1{0%,3%{opacity:0}6%,93%{opacity:1}97%,100%{opacity:0}}
+@keyframes tl2{0%,15%{opacity:0}18%,93%{opacity:1}97%,100%{opacity:0}}
+@keyframes tl3{0%,29%{opacity:0}32%,93%{opacity:1}97%,100%{opacity:0}}
+@keyframes tl4{0%,43%{opacity:0}46%,93%{opacity:1}97%,100%{opacity:0}}
+@keyframes tl5{0%,57%{opacity:0}60%,93%{opacity:1}97%,100%{opacity:0}}
+@keyframes tl6{0%,73%{opacity:0}76%,93%{opacity:1}97%,100%{opacity:0}}
+.caret{display:inline-block;width:8px;height:15px;background:var(--local);vertical-align:-2px;animation:blink 1s steps(1) infinite;}
+@keyframes blink{50%{opacity:0}}
+/* ═══ VISUAL: browser ═══ */
+.url{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 14px;font-family:'JetBrains Mono';font-size:10px;color:var(--sub);margin-left:8px;}
+.bro-body{position:relative;padding:22px;min-height:280px;}
+.skel{display:flex;gap:14px;}
+.skel .colL{flex:1.2;}
+.skel .colR{flex:1;}
+.sk-row{height:38px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;gap:10px;padding:0 12px;background:var(--panel2);}
+.sk-row .thumb{width:22px;height:22px;border-radius:6px;background:#23263A;}
+.sk-row .bar{height:7px;border-radius:4px;background:#23263A;flex:1;}
+.sk-row .price{font-family:'JetBrains Mono';font-size:10.5px;color:var(--sub);}
+.sk-row.h1{animation:rowGlow 12s linear infinite;}
+.sk-row.h2{animation:rowGlow 12s linear infinite;animation-delay:2.4s;}
+.sk-row.h3{animation:rowGlow 12s linear infinite;animation-delay:4.8s;}
+@keyframes rowGlow{0%,4%{border-color:var(--line);box-shadow:none}7%,16%{border-color:var(--browser);box-shadow:0 0 18px rgba(94,224,200,.18)}20%,100%{border-color:var(--line);box-shadow:none}}
+.res-panel{border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:14px;}
+.res-panel .rt{font-family:'Inter';font-size:9.5px;font-weight:800;letter-spacing:.2em;color:var(--browser);margin-bottom:10px;}
+.res-line{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:10.5px;color:var(--sub);padding:6px 2px;border-bottom:1px dashed var(--line);opacity:0;}
+.res-line b{color:var(--ink);}
+.res-line.r1{animation:res1 12s linear infinite;}
+.res-line.r2{animation:res2 12s linear infinite;}
+.res-line.r3{animation:res3 12s linear infinite;}
+@keyframes res1{0%,22%{opacity:0;transform:translateY(4px)}26%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+@keyframes res2{0%,42%{opacity:0;transform:translateY(4px)}46%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+@keyframes res3{0%,62%{opacity:0;transform:translateY(4px)}66%,94%{opacity:1;transform:none}98%,100%{opacity:0}}
+.done-chip{margin-top:12px;display:inline-flex;align-items:center;gap:7px;font-family:'Inter';font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--browser);border:1px solid var(--browser);border-radius:99px;padding:4px 13px;opacity:0;animation:doneChip 12s linear infinite;}
+@keyframes doneChip{0%,80%{opacity:0}85%,95%{opacity:1}100%{opacity:0}}
+.cursor{position:absolute;z-index:5;width:18px;height:18px;animation:curMove 12s ease-in-out infinite;}
+.cursor svg{width:100%;height:100%;fill:var(--ink);stroke:#0A0C16;stroke-width:1;}
+.cursor::after{content:"";position:absolute;top:-7px;left:-7px;width:32px;height:32px;border-radius:50%;border:2px solid var(--browser);opacity:0;animation:clickPulse 12s ease-out infinite;}
+@keyframes curMove{
+  0%{transform:translate(30px,210px)}
+  6%{transform:translate(60px,28px)}
+  18%{transform:translate(64px,32px)}
+  24%{transform:translate(60px,78px)}
+  38%{transform:translate(64px,82px)}
+  44%{transform:translate(58px,128px)}
+  58%{transform:translate(62px,132px)}
+  66%{transform:translate(300px,60px)}
+  90%{transform:translate(304px,64px)}
+  100%{transform:translate(30px,210px)}
+}
+@keyframes clickPulse{
+  7%{opacity:0;transform:scale(.4)}9%{opacity:.9;transform:scale(.5)}14%{opacity:0;transform:scale(1.3)}
+  25%{opacity:0;transform:scale(.4)}27%{opacity:.9;transform:scale(.5)}32%{opacity:0;transform:scale(1.3)}
+  45%{opacity:0;transform:scale(.4)}47%{opacity:.9;transform:scale(.5)}52%{opacity:0;transform:scale(1.3)}
+  100%{opacity:0}
+}
+/* ═══ VISUAL: agent loop ═══ */
+.loop-wrap{display:flex;flex-direction:column;align-items:center;gap:26px;padding:30px 22px;}
+.loop-svg{width:min(300px,80%);}
+.lnode circle{fill:var(--panel2);stroke:var(--line);stroke-width:1.5;}
+.lnode text{font-family:'Inter';font-weight:800;font-size:10px;letter-spacing:.15em;fill:var(--sub);text-anchor:middle;}
+.lnode.pulse1 circle{animation:nodePulse 6s ease-in-out infinite;}
+.lnode.pulse2 circle{animation:nodePulse 6s ease-in-out infinite 1.5s;}
+.lnode.pulse3 circle{animation:nodePulse 6s ease-in-out infinite 3s;}
+.lnode.pulse4 circle{animation:nodePulse 6s ease-in-out infinite 4.5s;}
+@keyframes nodePulse{0%,12%,100%{stroke:var(--line)}4%,8%{stroke:var(--agent);filter:drop-shadow(0 0 8px rgba(142,155,255,.7))}}
+.orbit{fill:none;stroke:var(--agent);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:70 480;animation:orbit 6s linear infinite;transform-origin:150px 150px;}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.orbit-bg{fill:none;stroke:var(--line);stroke-width:1.5;}
+.goal-chip{font-family:'Inter';font-size:10.5px;font-weight:800;letter-spacing:.12em;color:var(--agent);border:1px solid var(--agent);border-radius:99px;padding:5px 16px;}
+.tasklist{width:100%;max-width:330px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);padding:14px 18px;}
+.task{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:700;color:var(--sub);padding:6px 0;}
+.task .box{width:15px;height:15px;border-radius:5px;border:1.5px solid var(--line);position:relative;flex-shrink:0;}
+.task .box::after{content:"";position:absolute;inset:2px;border-radius:3px;background:var(--agent);opacity:0;}
+.task.tk1 .box::after{animation:tick 9s linear infinite;}
+.task.tk2 .box::after{animation:tick 9s linear infinite 2.2s;}
+.task.tk3 .box::after{animation:tick 9s linear infinite 4.4s;}
+.task.tk4 .box::after{animation:tick 9s linear infinite 6.6s;}
+@keyframes tick{0%,8%{opacity:0;transform:scale(.3)}12%,88%{opacity:1;transform:scale(1)}96%,100%{opacity:0}}
+/* ═══ VISUAL: network ═══ */
+.net-wrap{padding:26px 18px;display:flex;justify-content:center;}
+.net-svg{width:min(480px,100%);}
+.edge{stroke:var(--line);stroke-width:1.5;}
+.edge-flow{stroke:var(--cross);stroke-width:1.8;stroke-dasharray:5 9;animation:flow 1.6s linear infinite;opacity:.8;}
+@keyframes flow{to{stroke-dashoffset:-28;}}
+.hub circle{fill:#1A1126;stroke:var(--cross);stroke-width:2;}
+.hub text{font-family:'Inter';font-weight:900;font-size:15px;letter-spacing:.1em;fill:var(--ink);text-anchor:middle;}
+.hub .hsub{font-size:7.5px;font-weight:700;fill:var(--sub);letter-spacing:.2em;}
+.sat circle{fill:var(--panel2);stroke:var(--line);stroke-width:1.5;}
+.sat text{font-family:'Inter';font-weight:800;font-size:8.5px;letter-spacing:.16em;fill:var(--sub);text-anchor:middle;}
+.sat.sp1 circle{animation:satPulse 7s ease-in-out infinite .5s;}
+.sat.sp2 circle{animation:satPulse 7s ease-in-out infinite 1.6s;}
+.sat.sp3 circle{animation:satPulse 7s ease-in-out infinite 2.7s;}
+.sat.sp4 circle{animation:satPulse 7s ease-in-out infinite 3.8s;}
+.sat.sp5 circle{animation:satPulse 7s ease-in-out infinite 4.9s;}
+.sat.sp6 circle{animation:satPulse 7s ease-in-out infinite 6s;}
+@keyframes satPulse{0%,10%,100%{stroke:var(--line)}3%,6%{stroke:var(--cross);filter:drop-shadow(0 0 8px rgba(233,133,216,.7))}}
+/* ── one day ── */
+.day-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:24px;overflow:hidden;margin-top:50px;}
+.day{background:var(--panel);padding:28px 22px;transition:.3s;position:relative;overflow:hidden;}
+.day:hover{background:var(--panel2);}
+.day::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
+.day.d1::before,.day.d2::before{background:var(--local);}
+.day.d3::before{background:var(--browser);}
+.day.d4::before,.day.d5::before{background:var(--agent);}
+.day.d6::before{background:var(--cross);}
+.day .time{font-family:'Inter';font-weight:900;font-size:21px;letter-spacing:-.02em;}
+.day svg.ic{width:21px;height:21px;color:var(--sub);margin:14px 0 10px;}
+.day b{display:block;font-size:12.5px;font-weight:800;line-height:1.65;}
+.day span{display:block;font-size:10px;color:var(--sub);margin-top:5px;font-family:'Inter';font-weight:700;letter-spacing:.15em;}
+/* ── closing ── */
+.closing{text-align:center;padding-top:140px;padding-bottom:120px;}
+.closing .en-huge{font-family:'Inter';font-weight:900;font-size:clamp(34px,7vw,88px);letter-spacing:-.03em;line-height:1.06;}
+.closing .en-huge .grad{background:linear-gradient(92deg,var(--local),var(--browser),var(--agent),var(--cross));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.closing p{margin-top:26px;font-size:13px;font-weight:700;color:#C2C4D2;line-height:2.3;}
+footer{border-top:1px solid var(--line);padding:38px 28px 54px;color:#4E5060;font-size:10px;line-height:2.1;max-width:1200px;margin:0 auto;}
+footer a{color:#6E7187;text-decoration:none;border-bottom:1px solid #33364A;}
+@media(max-width:760px){section{padding:76px 20px;}.hero{padding:84px 20px 50px;}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gemGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4285F4"/><stop offset=".55" stop-color="#9B72CB"/><stop offset="1" stop-color="#D96570"/></linearGradient>
+  <linearGradient id="cpGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#26C6DA"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#9333EA"/></linearGradient>
+  <symbol id="logo-claude" viewBox="0 0 100 100"><g fill="#D97757"><circle cx="50" cy="50" r="11"/><rect x="46" y="2" width="8" height="32" rx="4"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(33 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(66 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(99 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(132 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(165 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(198 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(231 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(264 50 50)"/><rect x="46" y="2" width="8" height="32" rx="4" transform="rotate(297 50 50)"/><rect x="46" y="9" width="8" height="25" rx="4" transform="rotate(330 50 50)"/></g></symbol>
+  <symbol id="logo-openai" viewBox="0 0 100 100"><g fill="none" stroke="#F1F2F7" stroke-width="6.5"><rect x="36" y="7" width="28" height="56" rx="14"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="7" width="28" height="56" rx="14" transform="rotate(120 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(60 50 50)"/><rect x="36" y="37" width="28" height="56" rx="14" transform="rotate(120 50 50)"/></g></symbol>
+  <symbol id="logo-gemini" viewBox="0 0 100 100"><path fill="url(#gemGrad)" d="M50 2 C56 32 68 44 98 50 C68 56 56 68 50 98 C44 68 32 56 2 50 C32 44 44 32 50 2 Z"/></symbol>
+  <symbol id="logo-copilot" viewBox="0 0 100 100"><rect width="100" height="100" rx="26" fill="url(#cpGrad)"/><g fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"><circle cx="37" cy="50" r="16"/><circle cx="63" cy="50" r="16"/></g></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M8 16v-5"/><path d="M13 16V8"/><path d="M18 16v-8"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-cursor" viewBox="0 0 24 24"><path d="M4 4l7 16 2.5-6.5L20 11 4 4z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6 12 13 2 6"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><path d="M4.9 4.9l2.1 2.1"/><path d="M17 17l2.1 2.1"/><path d="M19.1 4.9 17 7"/><path d="M7 17l-2.1 2.1"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2c1 5.5 3.5 8 10 10-6.5 2-9 4.5-10 10-1-5.5-3.5-8-10-10 6.5-2 9-4.5 10-10z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
+</defs></svg>
+
+<div id="progress"></div>
+
+<nav>
+  <div class="nav-in">
+    <span class="nav-brand en">AI GUIDE — VISUAL</span>
+    <a href="#local">01 LOCAL</a><a href="#browser">02 BROWSER</a><a href="#agent">03 AGENT</a><a href="#cross">04 CROSS</a><a href="#oneday">ONE DAY</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="glow glow1"></div><div class="glow glow2"></div>
+  <div class="eyebrow en">VISUAL EDITION / AI AGENTS NOW — 2026.06</div>
+  <h1 class="en">WHEN AI<span class="l2">GETS HANDS.</span></h1>
+  <p class="jp">AIは「答える」から、<b>「動く」</b>へ。</p>
+  <div class="cstrip">
+    <span class="cpill k1 en"><i></i>LOCAL</span>
+    <span class="cpill k2 en"><i></i>BROWSER</span>
+    <span class="cpill k3 en"><i></i>AGENT</span>
+    <span class="cpill k4 en"><i></i>CROSS</span>
+  </div>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="mtrack en">
+    <span>LOCAL</span><span><b>BROWSER</b></span><span>AGENT</span><span><b>CROSS</b></span><span>LOCAL</span><span><b>BROWSER</b></span><span>AGENT</span><span><b>CROSS</b></span>
+  </div>
+</div>
+
+<!-- 01 LOCAL -->
+<section id="local" class="s-local">
+  <div class="ch">
+    <div class="reveal" style="color:var(--local);">
+      <span class="ch-num en">01</span>
+      <div class="ch-label en">LOCAL</div>
+      <h2 style="color:var(--ink);">PCの中で、働く。</h2>
+      <p class="def">フォルダを開き、ファイルを読み、コマンドを実行する。</p>
+      <div class="tools">
+        <span class="tool"><svg><use href="#logo-claude"/></svg>Claude Code</span>
+        <span class="tool"><svg><use href="#logo-claude"/></svg>Cowork</span>
+        <span class="tool"><svg><use href="#logo-openai"/></svg>Codex CLI</span>
+        <span class="tool"><svg><use href="#logo-gemini"/></svg>Gemini CLI</span>
+      </div>
+      <ul class="uses">
+        <li><svg class="ic"><use href="#i-folder"/></svg>請求書PDF数百枚 → 自動で台帳に</li>
+        <li><svg class="ic"><use href="#i-chart"/></svg>CSV12ヶ月分 → グラフ付きレポートに</li>
+        <li><svg class="ic"><use href="#i-code"/></svg>レガシーコード → 仕様書に</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="vframe">
+        <div class="vhead"><i></i><i></i><i></i><span class="vt">claude — 請求書の整理</span></div>
+        <div class="term-body">
+          <div class="tline t1"><span class="p">$</span> claude <span class="dim">"invoicesフォルダを台帳にして"</span></div>
+          <div class="tline t2"><span class="dim">▸ Reading invoices/ …</span> 312 files</div>
+          <div class="tline t3"><span class="dim">▸ Extracting</span> 取引先 / 金額 / 日付</div>
+          <div class="tline t4"><span class="dim">▸ Renaming files …</span> <span class="ok">✓</span></div>
+          <div class="tline t5"><span class="dim">▸ Writing</span> 台帳_2026-06.xlsx <span class="ok">✓</span></div>
+          <div class="tline t6"><span class="ok">✓ Done</span> <span class="dim">— 312 rows, 4m12s</span> <span class="caret"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><span class="v en"><span class="count" data-val="7">0</span>h</span><span class="k">人の介入なしの自律稼働</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="12.5" data-dec="1">0</span>M</span><span class="k">読み解いたコード行数</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="99.9" data-dec="1">0</span>%</span><span class="k">実装の数値精度</span></div>
+    <div class="stat"><span class="v en">24→5</span><span class="k">納期の短縮（日）</span></div>
+  </div>
+  <p class="src-tag en">REAL CASE : RAKUTEN × CLAUDE CODE（vLLM / 公式事例）</p>
+</section>
+
+<!-- 02 BROWSER -->
+<section id="browser" class="s-browser">
+  <div class="ch">
+    <div class="reveal" style="color:var(--browser);">
+      <span class="ch-num en">02</span>
+      <div class="ch-label en">BROWSER</div>
+      <h2 style="color:var(--ink);">画面を見て、動かす。</h2>
+      <p class="def">ページを読み、クリックし、フォームに入力する。</p>
+      <div class="tools">
+        <span class="tool"><svg><use href="#logo-claude"/></svg>Claude in Chrome</span>
+        <span class="tool"><svg><use href="#logo-openai"/></svg>ChatGPT Atlas</span>
+        <span class="tool"><svg><use href="#logo-gemini"/></svg>Gemini in Chrome</span>
+        <span class="tool"><svg><use href="#logo-copilot"/></svg>Copilot in Edge</span>
+      </div>
+      <ul class="uses">
+        <li><svg class="ic"><use href="#i-search"/></svg>競合ECを巡回 → 価格比較表に</li>
+        <li><svg class="ic"><use href="#i-cursor"/></svg>管理画面の確認・転記を隣で補助</li>
+        <li><svg class="ic"><use href="#i-globe"/></svg>条件を渡して出張手配の候補出し</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="vframe">
+        <div class="vhead"><i></i><i></i><i></i><span class="url">https://competitor-shop.example</span></div>
+        <div class="bro-body">
+          <div class="skel">
+            <div class="colL">
+              <div class="sk-row h1"><span class="thumb"></span><span class="bar"></span><span class="price">¥2,480</span></div>
+              <div class="sk-row h2"><span class="thumb"></span><span class="bar"></span><span class="price">¥1,980</span></div>
+              <div class="sk-row h3"><span class="thumb"></span><span class="bar"></span><span class="price">¥3,150</span></div>
+              <div class="sk-row"><span class="thumb"></span><span class="bar"></span><span class="price">¥2,760</span></div>
+            </div>
+            <div class="colR">
+              <div class="res-panel">
+                <div class="rt en">PRICE WATCH — 自動生成</div>
+                <div class="res-line r1"><span>A社 同等品</span><b>¥2,480</b></div>
+                <div class="res-line r2"><span>B社 同等品</span><b>¥1,980 ▼</b></div>
+                <div class="res-line r3"><span>C社 同等品</span><b>¥3,150</b></div>
+                <span class="done-chip en">✓ SHEET UPDATED</span>
+              </div>
+            </div>
+          </div>
+          <div class="cursor"><svg viewBox="0 0 24 24"><path d="M4 2l6 18 2.5-7L20 10.5 4 2z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><span class="v en"><span class="count" data-val="0">0</span></span><span class="k">レポート生成に要した人の操作</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="20">0</span>p</span><span class="k">自律生成されたSEO監査の分量</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="4">0</span></span><span class="k">ブラウザ操作に参入した主要AI社数</span></div>
+  </div>
+  <p class="src-tag en">REAL CASE : CHATGPT ATLAS — AGENT MODE / AGENTIC BROWSER REPORTS</p>
+</section>
+
+<!-- 03 AGENT -->
+<section id="agent" class="s-agent">
+  <div class="ch">
+    <div class="reveal" style="color:var(--agent);">
+      <span class="ch-num en">03</span>
+      <div class="ch-label en">AGENT</div>
+      <h2 style="color:var(--ink);">目標から、自走する。</h2>
+      <p class="def">計画し、実行し、つまずいたら自分で直す。</p>
+      <div class="tools">
+        <span class="tool"><svg><use href="#logo-openai"/></svg>Deep Research</span>
+        <span class="tool"><svg><use href="#logo-openai"/></svg>Codex</span>
+        <span class="tool"><svg><use href="#logo-claude"/></svg>サブエージェント</span>
+        <span class="tool"><svg><use href="#logo-copilot"/></svg>Researcher / Analyst</span>
+      </div>
+      <ul class="uses">
+        <li><svg class="ic"><use href="#i-doc"/></svg>30分で出典つき調査レポート</li>
+        <li><svg class="ic"><use href="#i-code"/></svg>バグ報告 → 修正PRが返ってくる</li>
+        <li><svg class="ic"><use href="#i-chart"/></svg>売上データ → 示唆まで出す</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="vframe">
+        <div class="vhead"><i></i><i></i><i></i><span class="vt">agent — autonomous loop</span></div>
+        <div class="loop-wrap">
+          <span class="goal-chip en">GOAL : "市場調査をまとめて"</span>
+          <svg class="loop-svg" viewBox="0 0 300 300">
+            <circle class="orbit-bg" cx="150" cy="150" r="92"/>
+            <circle class="orbit" cx="150" cy="150" r="92"/>
+            <g class="lnode pulse1"><circle cx="150" cy="58" r="30"/><text x="150" y="62">PLAN</text></g>
+            <g class="lnode pulse2"><circle cx="242" cy="150" r="30"/><text x="242" y="154">ACT</text></g>
+            <g class="lnode pulse3"><circle cx="150" cy="242" r="30"/><text x="150" y="246">CHECK</text></g>
+            <g class="lnode pulse4"><circle cx="58" cy="150" r="30"/><text x="58" y="154">FIX</text></g>
+          </svg>
+          <div class="tasklist">
+            <div class="task tk1"><span class="box"></span>情報源を特定（38 sources）</div>
+            <div class="task tk2"><span class="box"></span>本文を読み込み・要点抽出</div>
+            <div class="task tk3"><span class="box"></span>矛盾データを再検証</div>
+            <div class="task tk4"><span class="box"></span>出典つきレポートを生成</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><span class="v en"><span class="count" data-val="2">0</span></span><span class="k">Researcherが同時実行するAI社数（OpenAI×Anthropic）</span></div>
+    <div class="stat"><span class="v en">全社</span><span class="k">住友商事のCopilot導入規模</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="25">0</span></span><span class="k">ライセンスで使える月間クエリ数</span></div>
+  </div>
+  <p class="src-tag en">REAL CASE : MICROSOFT RESEARCHER / 住友商事 / ベネッセ「社内相談AI」</p>
+</section>
+
+<!-- 04 CROSS -->
+<section id="cross" class="s-cross">
+  <div class="ch">
+    <div class="reveal" style="color:var(--cross);">
+      <span class="ch-num en">04</span>
+      <div class="ch-label en">CROSS</div>
+      <h2 style="color:var(--ink);">点が、線になる。</h2>
+      <p class="def">MCP——AIと業務ツールをつなぐ「AIのUSB-C」。</p>
+      <div class="tools">
+        <span class="tool"><svg class="ic" style="color:var(--cross);width:20px;height:20px;"><use href="#i-spark"/></svg>MCP / コネクタ</span>
+        <span class="tool"><svg class="ic" style="color:var(--cross);width:20px;height:20px;"><use href="#i-clock"/></svg>スケジュール実行</span>
+        <span class="tool"><svg><use href="#logo-copilot"/></svg>Copilot Studio</span>
+      </div>
+      <ul class="uses">
+        <li><svg class="ic"><use href="#i-mail"/></svg>毎朝8:30、ブリーフィングが届く</li>
+        <li><svg class="ic"><use href="#i-users"/></svg>問い合わせ → 返信案 → 人が承認</li>
+        <li><svg class="ic"><use href="#i-gear"/></svg>受注伝票 → 基幹システム → 通知</li>
+      </ul>
+    </div>
+    <div class="reveal">
+      <div class="vframe">
+        <div class="vhead"><i></i><i></i><i></i><span class="vt">mcp — connected workflow</span></div>
+        <div class="net-wrap">
+          <svg class="net-svg" viewBox="0 0 480 340">
+            <line class="edge" x1="240" y1="170" x2="100" y2="60"/><line class="edge-flow" x1="240" y1="170" x2="100" y2="60"/>
+            <line class="edge" x1="240" y1="170" x2="380" y2="60"/><line class="edge-flow" x1="240" y1="170" x2="380" y2="60" style="animation-delay:.4s"/>
+            <line class="edge" x1="240" y1="170" x2="60" y2="180"/><line class="edge-flow" x1="240" y1="170" x2="60" y2="180" style="animation-delay:.8s"/>
+            <line class="edge" x1="240" y1="170" x2="420" y2="180"/><line class="edge-flow" x1="240" y1="170" x2="420" y2="180" style="animation-delay:1.2s"/>
+            <line class="edge" x1="240" y1="170" x2="120" y2="290"/><line class="edge-flow" x1="240" y1="170" x2="120" y2="290" style="animation-delay:1.6s"/>
+            <line class="edge" x1="240" y1="170" x2="360" y2="290"/><line class="edge-flow" x1="240" y1="170" x2="360" y2="290" style="animation-delay:2s"/>
+            <g class="sat sp1"><circle cx="100" cy="60" r="27"/><text x="100" y="64">MAIL</text></g>
+            <g class="sat sp2"><circle cx="380" cy="60" r="27"/><text x="380" y="64">DRIVE</text></g>
+            <g class="sat sp3"><circle cx="60" cy="180" r="27"/><text x="60" y="184">WEB</text></g>
+            <g class="sat sp4"><circle cx="420" cy="180" r="27"/><text x="420" y="184">ERP</text></g>
+            <g class="sat sp5"><circle cx="120" cy="290" r="27"/><text x="120" y="294">CSV</text></g>
+            <g class="sat sp6"><circle cx="360" cy="290" r="27"/><text x="360" y="294">TEAMS</text></g>
+            <g class="hub"><circle cx="240" cy="170" r="44"/><text x="240" y="168">AI</text><text class="hsub" x="240" y="186">VIA MCP</text></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><span class="v en"><span class="count" data-val="500">0</span>+</span><span class="k">公開MCPサーバー数</span></div>
+    <div class="stat"><span class="v en"><span class="count" data-val="4">0</span></span><span class="k">採用した主要AI・IT企業（Anthropic / OpenAI / Google / Microsoft）</span></div>
+    <div class="stat"><span class="v en">-<span class="count" data-val="30">0</span>%</span><span class="k">連携開発の工数削減（業界レポート）</span></div>
+  </div>
+  <p class="src-tag en">REAL CASE : MODEL CONTEXT PROTOCOL — DE FACTO STANDARD</p>
+</section>
+
+<!-- ONE DAY -->
+<section id="oneday">
+  <div class="reveal" style="text-align:center;">
+    <div class="ch-label en" style="justify-content:center;color:var(--sub);">SIMULATION — ONE DAY</div>
+    <h2 style="font-size:clamp(26px,4.2vw,44px);font-weight:900;">4つが揃うと、一日はこう回る。</h2>
+  </div>
+  <div class="day-strip reveal">
+    <div class="day d1"><span class="time en">07:30</span><svg class="ic"><use href="#i-mail"/></svg><b>朝のブリーフィングが届いている</b><span class="en">CROSS</span></div>
+    <div class="day d2"><span class="time en">09:00</span><svg class="ic"><use href="#i-gear"/></svg><b>受注伝票が基幹システムに登録済み</b><span class="en">CROSS × LOCAL</span></div>
+    <div class="day d3"><span class="time en">11:00</span><svg class="ic"><use href="#i-search"/></svg><b>競合価格の巡回チェックが完了</b><span class="en">BROWSER</span></div>
+    <div class="day d4"><span class="time en">14:00</span><svg class="ic"><use href="#i-users"/></svg><b>会議後、議事録とタスクができている</b><span class="en">AGENT</span></div>
+    <div class="day d5"><span class="time en">16:00</span><svg class="ic"><use href="#i-doc"/></svg><b>明日の資料の調査が裏で走っている</b><span class="en">AGENT</span></div>
+    <div class="day d6"><span class="time en">22:00</span><svg class="ic"><use href="#i-clock"/></svg><b>日次レポートが自動でまとまる</b><span class="en">CROSS</span></div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="reveal">
+    <p class="en-huge en">CHAT WAS ONLY<br><span class="grad">THE BEGINNING.</span></p>
+    <p>最初の一歩は小さくていい。<br>「毎回やっているあの作業」から。</p>
+  </div>
+</section>
+
+<footer>
+  本資料は2026年6月時点の公開情報に基づきます。導入時は人の承認ステップ・権限とログの管理・半自動からの段階導入が原則です。<br>
+  Claude は Anthropic PBC、ChatGPT は OpenAI, Inc.、Gemini は Google LLC、Copilot は Microsoft Corporation の商標または登録商標です。<br>
+  主な出典：<a href="https://claude.com/customers/rakuten">楽天×Claude Code（Anthropic公式）</a> ／ <a href="https://www.cnbc.com/2026/03/24/anthropic-claude-ai-agent-use-computer-finish-tasks.html">CNBC</a> ／ <a href="https://nohacks.co/blog/agentic-browser-landscape-2026">Agentic Browser Landscape 2026</a> ／ <a href="https://en.wikipedia.org/wiki/Model_Context_Protocol">MCP（Wikipedia）</a> ／ <a href="https://ledge.ai/articles/microsoft_copilot_researcher_openai_anthropic_multi_model">Ledge.ai</a> ／ <a href="https://jp.ext.hp.com/techdevice/ai/ai_explained_12/">Copilot企業事例</a>
+</footer>
+
+<script>
+const io = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('on');
+    e.target.querySelectorAll('.count').forEach(el => {
+      if (el.dataset.done) return;
+      el.dataset.done = '1';
+      const val = parseFloat(el.dataset.val), dec = parseInt(el.dataset.dec || '0');
+      const t0 = performance.now(), dur = 1400;
+      const tick = now => {
+        const p = Math.min((now - t0) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = (val * eased).toFixed(dec);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+const bar = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+}, { passive: true });
+</script>
+</body>
+</html>
